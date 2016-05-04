@@ -1,10 +1,10 @@
 # Authorization
 
-[![Build Status](https://img.shields.io/travis/stevebauman/authorization/master.svg?style=flat-square)](https://travis-ci.org/stevebauman/authorization)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/stevebauman/authorization/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/stevebauman/authorization/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/stevebauman/authorization.svg?style=flat-square)](https://packagist.org/packages/stevebauman/authorization)
-[![Latest Stable Version](https://img.shields.io/packagist/v/stevebauman/authorization.svg?style=flat-square)](https://packagist.org/packages/stevebauman/authorization)
-[![License](https://img.shields.io/packagist/l/stevebauman/authorization.svg?style=flat-square)](https://packagist.org/packages/stevebauman/authorization)
+[![Build Status](https://img.shields.io/travis/larapacks/authorization/master.svg?style=flat-square)](https://travis-ci.org/larapacks/authorization)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/larapacks/authorization/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/larapacks/authorization/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
+[![Latest Stable Version](https://img.shields.io/packagist/v/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
+[![License](https://img.shields.io/packagist/l/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
 
 An easy, native role / permission management system for Laravel.
 
