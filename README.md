@@ -296,7 +296,6 @@ Route::get('users', [
 ]);
 
 // Multiple permissions:
-
 Route::get('users', [
     'uses' => 'UsersController@index',
     'middleware' => 'permission:users.index,users.create', // Users must have index **and** create rights to access this route.
@@ -312,7 +311,6 @@ Route::get('users', [
 ]);
 
 // Multiple roles:
-
 Route::get('users', [
     'uses' => 'UsersController@index',
     'middleware' => 'role:administrator,member', // Users must be an administrator **and** a member to access this route.
