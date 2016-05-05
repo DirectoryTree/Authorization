@@ -163,14 +163,14 @@ public function create()
 
 // Using Laravel's native Gate facade:
 
-if (Gate::allows('users.edit')) {
+if (Gate::allows('users.create')) {
     //
 }
 
 // Using Laravel's native `@can` directive in your views:
 
-@can('users.index')
-    <!-- This user can access the index. -->
+@can('users.create')
+    <!-- This user can create other users. -->
 @endcan
 ```
 
