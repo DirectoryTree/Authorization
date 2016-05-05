@@ -9,7 +9,9 @@
 An easy, native role / permission management system for Laravel.
 
 Authorization automatically adds your database permissions and roles to the `Illuminate\Auth\Access\Gate`, this means
-that you can utilize native laravel policies and methods for authorization.
+that you can utilize all native laravel policies and methods for authorization.
+
+This also means you're not walled into using this package if you decide it's not for you. 
 
 ## Installation
 
@@ -132,35 +134,51 @@ $administrator->label = 'Admin';
 
 $administrator->save();
 
-$administrator->grant($createUsers);
+$administrator->permissions()->save($createUsers);
 ```
 
 Now assign the role to the user:
 
 ```php
-auth()->user()->assignRole($administrator);
+$user->roles()->save($administrator);
 ```
 
-Perform authorization like so:
+### Performing Authorization (Native)
 
 ```php
-if (auth()->user()->hasPermission('users.create')) {
-    
+// Using Laravel's native `can()` method:
+
+if ($user->can('users.create')) {
+    // This user can create other users.
 }
+
+// Using Laravel's native `authorize()` method in your controllers:
+
+public function create()
+{
+    $this->authorize('users.create');
+    
+    User::create(['...']);
+}
+
+// Using Laravel's native Gate facade:
+
+if (Gate::allows('users.edit')) {
+    //
+}
+
+// Using Laravel's native `@can` directive in your views:
+
+@can('users.index')
+    <!-- This user can access the index. -->
+@endcan
 ```
 
-You can also create user specific permissions:
+### Performing Authorization (Package Specific)
+
+Checking for permission:
 
 ```php
-$createUsers = new Permission();
-
-$createUsers->name = 'users.create';
-$createUsers->label = 'Create Users';
-
-$createUsers->save();
-
-$user->permissions()->save($createUsers);
-
 // Using the permissions name.
 if ($user->hasPermission('users.create')) {
     //
@@ -170,42 +188,6 @@ if ($user->hasPermission('users.create')) {
 if ($user->hasPermission($createUsers)) {
     //
 }
-```
-
-Or using Laravel's native authorization methods such as the `Gate` facade:
-
-```php
-if (Gate::allows('users.edit')) {
-    //
-}
-```
-
-Or by using Laravel's native `AuthorizesRequests` trait methods in your controllers:
-
-```php
-public function index()
-{
-    $this->authorize('users.index');
-    
-    // User can access index.
-}
-```
-
-Or by using Laravel's native `can` method on the user:
-
-```php
-if (auth()->user()->can('users.index')) {
-    // This user can access the index.
-}
-```
-
-
-Or by using Laravel's native `@can` directive in your views:
-
-```php
-@can('users.index')
-    <!-- This user can access the index. -->
-@endcan
 ```
 
 Checking for multiple permissions:
@@ -255,6 +237,30 @@ if (auth()->user()->hasAnyRoles(['administrator', 'member', 'guest'])) {
     // This user is either an administrator, member or guest.
 } else {
     // It looks like the user doesn't have any of these roles.
+}
+```
+
+### Misc Usage
+You can also create user specific permissions:
+
+```php
+$createUsers = new Permission();
+
+$createUsers->name = 'users.create';
+$createUsers->label = 'Create Users';
+
+$createUsers->save();
+
+$user->permissions()->save($createUsers);
+
+// Using the permissions name.
+if ($user->hasPermission('users.create')) {
+    //
+}
+
+// Using the permissions model.
+if ($user->hasPermission($createUsers)) {
+    //
 }
 ```
 
