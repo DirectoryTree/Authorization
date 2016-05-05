@@ -332,7 +332,7 @@ You need database permissions but you need logic in some permissions as well.
 
 For example, if a user creates a post, only that user should be able to edit it, as well as administrators.
 
-To include this logic into gate abilities, you either need to:
+To include this logic into gate abilities, your options are:
 
 - Define gate abilities in the service provider with the logic (which can get cluttered and become an organizational mess)
 - Define policy classes and have a mix of database abilities with policies (more mess)
