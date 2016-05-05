@@ -375,4 +375,23 @@ public function edit($id)
 It's not necessary to save the permission onto the user because the logic is inside
 the permission itself to determine whether or not the user can perform the ability.
 
-Cool huh?
+> That's great and all, but I need access to be able to bypass these checks if the user is an administrator!
+
+No problem, just go into your native `app/Providers/AuthServiceProvider` and define that explicitly in the gate.
+
+```php
+public function boot(GateContract $gate)
+{
+    $this->registerPolicies($gate);
+    
+    $gate->before(function ($user, $ability) {
+        if ($user->hasRole('administrator') {
+            return true;
+        }
+    });
+}
+```
+
+Now all your dynamic logic is stored inside the database, and your clean logic is stored inside the `AuthServiceProvider`.
+
+Neat huh?
