@@ -143,6 +143,29 @@ Now assign the role to the user:
 $user->roles()->save($administrator);
 ```
 
+You can also create user specific permissions:
+
+```php
+$createUsers = new Permission();
+
+$createUsers->name = 'users.create';
+$createUsers->label = 'Create Users';
+
+$createUsers->save();
+
+$user->permissions()->save($createUsers);
+
+// Using the permissions name.
+if ($user->hasPermission('users.create')) {
+    //
+}
+
+// Using the permissions model.
+if ($user->hasPermission($createUsers)) {
+    //
+}
+```
+
 ### Performing Authorization (Native)
 
 ```php
@@ -237,30 +260,6 @@ if (auth()->user()->hasAnyRoles(['administrator', 'member', 'guest'])) {
     // This user is either an administrator, member or guest.
 } else {
     // It looks like the user doesn't have any of these roles.
-}
-```
-
-### Misc Usage
-You can also create user specific permissions:
-
-```php
-$createUsers = new Permission();
-
-$createUsers->name = 'users.create';
-$createUsers->label = 'Create Users';
-
-$createUsers->save();
-
-$user->permissions()->save($createUsers);
-
-// Using the permissions name.
-if ($user->hasPermission('users.create')) {
-    //
-}
-
-// Using the permissions model.
-if ($user->hasPermission($createUsers)) {
-    //
 }
 ```
 
