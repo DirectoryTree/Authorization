@@ -25,6 +25,7 @@ class CreateAuthorizationTables extends Migration
             $table->increments('id');
             $table->string('name'); // The name field is mandatory.
             $table->string('label')->nullable();
+            $table->text('closure')->nullable();
             $table->timestamps();
         });
 

@@ -10,6 +10,9 @@ use Larapacks\Authorization\Tests\Stubs\Role;
 
 class TestCase extends BaseTestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp()
     {
         parent::setUp();
@@ -20,12 +23,15 @@ class TestCase extends BaseTestCase
             $table->timestamps();
             $table->string('name');
         });
-
+        
         $this->artisan('migrate', [
             '--realpath' => realpath(__DIR__.'/../src/Migrations'),
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getPackageProviders($app)
     {
         return [
@@ -33,6 +39,9 @@ class TestCase extends BaseTestCase
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:

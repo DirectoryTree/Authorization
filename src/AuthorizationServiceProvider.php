@@ -35,9 +35,11 @@ class AuthorizationServiceProvider extends ServiceProvider
 
         // Dynamically register permissions with Laravel's Gate.
         foreach ($this->getPermissions() as $permission) {
-            $gate->define($permission->name, function ($user) use ($permission) {
+            $closure = ($permission->hasClosure() ? $permission->closure : function ($user) use ($permission) {
                 return $user->hasPermission($permission);
             });
+
+            $gate->define($permission->name, $closure);
         }
     }
 

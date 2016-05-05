@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Tests;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Collection;
 use Larapacks\Authorization\Tests\Stubs\Permission;
 use Larapacks\Authorization\Tests\Stubs\Role;
@@ -631,5 +632,55 @@ class AuthorizationTest extends TestCase
 
         $this->assertInstanceOf(Permission::class, $admin->revoke($editUser));
         $this->assertInstanceOf(Permission::class, $admin->revoke($editUser));
+    }
+
+    public function test_closure_permission()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $create = new Permission();
+
+        $create->name = 'create-post';
+        $create->label = 'Create Post';
+        $create->closure = function ($user, $id) {
+            return $user->id == $id;
+        };
+
+        $create->save();
+
+        // Stub the service provider defined ability.
+        Gate::define($create->name, $create->closure);
+
+        $this->assertTrue($user->can('create-post', 1));
+        $this->assertFalse($user->can('create-post', 2));
+    }
+
+    public function test_closure_permission_fails()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $create = new Permission();
+
+        $create->name = 'create-post';
+        $create->label = 'Create Post';
+        $create->closure = function ($user, $id, $otherParameter) {
+            return $user->id == $id;
+        };
+
+        $create->save();
+
+        // Stub the service provider defined ability.
+        Gate::define($create->name, $create->closure);
+
+        $this->assertTrue($user->can('create-post', [1, 'other-parameter']));
+
+        $this->expectException(\ErrorException::class);
+
+        // Missing argument three.
+        $user->can('create-post', [1]);
     }
 }
