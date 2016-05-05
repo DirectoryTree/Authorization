@@ -322,31 +322,55 @@ Route::get('users', [
 ]);
 ```
 
-### Model Specific Permissions
+### Closure Permissions
 
-To create permissions for a specific model, use the models key for a unique permission name. For example:
+> **Note:** This feature was introduced in `v1.1.0`.
+
+Problem:
+
+You want to have database permissions but you need logic in some permissions as well.
+
+For example, if a user creates a post, only that user should be able to edit it, as well as administrators.
+
+To include this logic into gate abilities, you either need to:
+
+- Define gate abilities in the service provider with the logic (which can get cluttered and become an organizational mess)
+- Define policy classes and have a mix of database abilities with policies (more mess)
+
+Solution:
+
+Store all abilities in the database including ones that require logic and utilize native laravel methods for all authorization.
+
+Here's how it's done:
 
 ```php
-$user = User::find(1);
+// Create the closure permission
 
 $permission = new Permission();
 
-$permission->name = "users.edit.$user->id";
-$permission->label = "Edit User: $user->name";
+$permission->name = "posts.edit";
+$permission->label = "Edit Posts";
+$permission->closure = function ($user, $post) {
+    return $user->id == $post->user_id;
+};
 
 $permission->save();
 ```
 
-Then validate it when editing the specific model:
+Use native laravel authorization:
 
 ```php
 public function edit($id)
 {
-    $user = $this->user->findOrFail($id);
-
-    // The current user must have permission to edit this specific user.
-    $this->authorize("users.edit.$user->id");
+    $post = Post::findOrFail($id);
     
-    return view('users.edit', compact('user'));
+    $this->authorize('posts.edit', [$post]);
+    
+    return view('posts.edit', compact('post'));
 }
 ```
+
+It's not necessary to save the permission onto the user because the logic is inside
+the permission itself to determine whether or not the user can perform the ability.
+
+Cool huh?
