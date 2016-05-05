@@ -336,7 +336,7 @@ To include this logic into gate abilities, you either need to:
 
 - Define gate abilities in the service provider with the logic (which can get cluttered and become an organizational mess)
 - Define policy classes and have a mix of database abilities with policies (more mess)
-- Policies these policies then need to be bound to a model, and if we don't have a model, we
+- Policies then need to be bound to a model, and if we don't have a model, we
  need to call the `policy()` helper method, and throw our own authorization exception (more confusion)
 
 Solution:
