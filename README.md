@@ -328,7 +328,7 @@ Route::get('users', [
 
 Problem:
 
-You want to have database permissions but you need logic in some permissions as well.
+You need database permissions but you need logic in some permissions as well.
 
 For example, if a user creates a post, only that user should be able to edit it, as well as administrators.
 
