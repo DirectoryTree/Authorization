@@ -384,7 +384,7 @@ public function boot(GateContract $gate)
 {
     $this->registerPolicies($gate);
     
-    $gate->before(function ($user, $ability) {
+    $gate->before(function ($user) {
         if ($user->hasRole('administrator') {
             return true;
         }
