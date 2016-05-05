@@ -678,7 +678,7 @@ class AuthorizationTest extends TestCase
 
         $this->assertTrue($user->can('create-post', [1, 'other-parameter']));
 
-        $this->expectException(\ErrorException::class);
+        $this->setExpectedException(\ErrorException::class);
 
         // Missing argument three.
         $user->can('create-post', [1]);
