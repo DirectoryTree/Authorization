@@ -385,7 +385,7 @@ public function boot(GateContract $gate)
     $this->registerPolicies($gate);
     
     $gate->before(function ($user) {
-        return $user->hasRole('administrator');
+        return ($user->hasRole('administrator') ?: null);
     });
 }
 ```
