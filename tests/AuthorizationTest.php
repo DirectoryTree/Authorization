@@ -652,7 +652,7 @@ class AuthorizationTest extends TestCase
 
         // Stub the service provider defined ability.
         Gate::define($create->name, $create->closure);
-
+        
         $this->assertTrue($user->can('create-post', 1));
         $this->assertFalse($user->can('create-post', 2));
     }
