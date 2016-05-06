@@ -3,11 +3,10 @@
 namespace Larapacks\Authorization\Traits;
 
 use SuperClosure\Exception\ClosureUnserializationException;
-use SuperClosure\Serializer;
 
 trait PermissionRolesTrait
 {
-    use HasRolesTrait;
+    use HasRolesTrait, SerializesClosures;
 
     /**
      * A permission may have many users.
@@ -47,7 +46,7 @@ trait PermissionRolesTrait
     public function setClosureAttribute($closure)
     {
         if ($closure instanceof \Closure) {
-            $closure = (new Serializer())->serialize($closure);
+            $closure = $this->serializeClosure($closure);
         }
 
         $this->attributes['closure'] = $closure;
@@ -62,6 +61,6 @@ trait PermissionRolesTrait
      */
     public function getClosureAttribute($closure)
     {
-        return (new Serializer())->unserialize($closure);
+        return $this->unserializeClosure($closure);
     }
 }
