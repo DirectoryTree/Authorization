@@ -18,7 +18,7 @@ This also means you're not walled into using this package if you decide it's not
 Insert Authorization in your `composer.json` file:
 
 ```json
-"larapacks/authorization": "1.0.*"
+"larapacks/authorization": "1.1.*"
 ```
 
 Then run `composer update`.
