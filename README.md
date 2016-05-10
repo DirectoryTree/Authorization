@@ -154,16 +154,6 @@ $createUsers->label = 'Create Users';
 $createUsers->save();
 
 $user->permissions()->save($createUsers);
-
-// Using the permissions name.
-if ($user->hasPermission('users.create')) {
-    //
-}
-
-// Using the permissions model.
-if ($user->hasPermission($createUsers)) {
-    //
-}
 ```
 
 ### Performing Authorization (Native)
