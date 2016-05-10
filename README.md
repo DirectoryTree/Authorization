@@ -113,6 +113,8 @@ You're all set!
 
 ## Usage
 
+Using authorization is easy, because it's utilizing native laravel relationships.
+
 Create a permission:
 
 ```php
