@@ -345,7 +345,7 @@ $permission = new Permission();
 $permission->name = "posts.edit";
 $permission->label = "Edit Posts";
 $permission->closure = function ($user, $post) {
-    return $user->id == $post->user_id;
+    return $user->id == $post->user_id || $user->hasRole('admin');
 };
 
 $permission->save();
