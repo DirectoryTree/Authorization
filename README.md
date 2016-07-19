@@ -71,7 +71,7 @@ class Permission extends Model
 }
 ```
 
-Now insert the `Larapacks\Authorization\Traits\UserRolesTrait` onto your `App\Models\User` model:
+Now insert the `Larapacks\Authorization\Traits\UserRolesTrait` onto your `App\User` model:
 
 ```php
 namespace App\Models;
