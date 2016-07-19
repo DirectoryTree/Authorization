@@ -28,7 +28,9 @@ trait PermissionRolesTrait
     public function hasClosure()
     {
         try {
-            if ($this->closure) return true;
+            if ($this->closure) {
+                return true;
+            }
         } catch (ClosureUnserializationException $e) {
             //
         }

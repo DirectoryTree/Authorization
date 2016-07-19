@@ -3,10 +3,10 @@
 namespace Larapacks\Authorization\Tests;
 
 use Illuminate\Support\Facades\Schema;
-use Orchestra\Testbench\TestCase as BaseTestCase;
 use Larapacks\Authorization\AuthorizationServiceProvider;
 use Larapacks\Authorization\Tests\Stubs\Permission;
 use Larapacks\Authorization\Tests\Stubs\Role;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
@@ -23,7 +23,7 @@ class TestCase extends BaseTestCase
             $table->timestamps();
             $table->string('name');
         });
-        
+
         $this->artisan('migrate', [
             '--realpath' => realpath(__DIR__.'/../src/Migrations'),
         ]);
