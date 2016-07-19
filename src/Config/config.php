@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'user' => 'App\Models\User',
+    'user' => App\User::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'role' => 'App\Models\Role',
+    'role' => App\Role::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -33,6 +33,6 @@ return [
     |
     */
 
-    'permission' => 'App\Models\Permission',
+    'permission' => App\Permission::class,
 
 ];
