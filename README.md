@@ -52,13 +52,6 @@ use Larapacks\Authorization\Traits\RolePermissionsTrait;
 class Role extends Model
 {
     use RolePermissionsTrait;
-
-    /**
-     * The roles table.
-     *
-     * @var string
-     */
-    protected $table = 'roles';
 }
 ```
 
@@ -75,13 +68,6 @@ use Larapacks\Authorization\Traits\PermissionRolesTrait;
 class Permission extends Model
 {
     use PermissionRolesTrait;
-
-    /**
-     * The permissions table.
-     *
-     * @var string
-     */
-    protected $table = 'permissions';
 }
 ```
 
