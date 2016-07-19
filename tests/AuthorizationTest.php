@@ -2,8 +2,8 @@
 
 namespace Larapacks\Authorization\Tests;
 
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Larapacks\Authorization\Tests\Stubs\Permission;
 use Larapacks\Authorization\Tests\Stubs\Role;
 use Larapacks\Authorization\Tests\Stubs\User;
@@ -652,7 +652,7 @@ class AuthorizationTest extends TestCase
 
         // Stub the service provider defined ability.
         Gate::define($create->name, $create->closure);
-        
+
         $this->assertTrue($user->can('create-post', 1));
         $this->assertFalse($user->can('create-post', 2));
     }
