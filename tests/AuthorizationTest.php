@@ -5,9 +5,9 @@ namespace Larapacks\Authorization\Tests;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Larapacks\Authorization\Authorization;
+use Larapacks\Authorization\Tests\Stubs\Permission;
 use Larapacks\Authorization\Tests\Stubs\Role;
 use Larapacks\Authorization\Tests\Stubs\User;
-use Larapacks\Authorization\Tests\Stubs\Permission;
 
 class AuthorizationTest extends TestCase
 {
