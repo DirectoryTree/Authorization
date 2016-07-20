@@ -4,9 +4,10 @@ namespace Larapacks\Authorization\Tests;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
-use Larapacks\Authorization\Tests\Stubs\Permission;
+use Larapacks\Authorization\Authorization;
 use Larapacks\Authorization\Tests\Stubs\Role;
 use Larapacks\Authorization\Tests\Stubs\User;
+use Larapacks\Authorization\Tests\Stubs\Permission;
 
 class AuthorizationTest extends TestCase
 {
@@ -682,5 +683,26 @@ class AuthorizationTest extends TestCase
 
         // Missing argument three.
         $user->can('create-post', [1]);
+    }
+
+    public function test_user_helper()
+    {
+        config()->set('authorization.user', User::class);
+
+        $this->assertInstanceOf(User::class, Authorization::user());
+    }
+
+    public function test_role_helper()
+    {
+        config()->set('authorization.role', Role::class);
+
+        $this->assertInstanceOf(Role::class, Authorization::role());
+    }
+
+    public function test_permission_helper()
+    {
+        config()->set('authorization.permission', Permission::class);
+
+        $this->assertInstanceOf(Permission::class, Authorization::permission());
     }
 }
