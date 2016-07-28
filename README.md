@@ -39,7 +39,7 @@ Then run `php artisan migrate`.
 
 Once you've done the migrations, create the following two models and insert the relevant trait:
 
-The Role model:
+The **Role** model:
 
 ```php
 <?php
@@ -55,7 +55,7 @@ class Role extends Model
 }
 ```
 
-The permission model:
+The **Permission** model:
 
 ```php
 <?php
