@@ -21,7 +21,7 @@ class RoleMiddleware
         $args = func_get_args();
 
         if ($args > 3) {
-            // If we've been given more than one permission, we
+            // If we've been given more than one role, we
             // need to retrieve all of them from the method.
             $roles = array_slice($args, 2);
         }
