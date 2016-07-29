@@ -2,6 +2,8 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Larapacks\Authorization\Authorization;
+
 trait HasRolesTrait
 {
     /**
@@ -11,7 +13,7 @@ trait HasRolesTrait
      */
     public function roles()
     {
-        $model = config('authorization.role');
+        $model = get_class(Authorization::role());
 
         return $this->belongsToMany($model);
     }

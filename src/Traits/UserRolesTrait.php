@@ -2,8 +2,9 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Larapacks\Authorization\Authorization;
 
 trait UserRolesTrait
 {
@@ -114,9 +115,7 @@ trait UserRolesTrait
     {
         if (is_string($permission)) {
             // If we weren't given a permission model, we'll try to find it by name.
-            $model = config('authorization.permission');
-
-            $permission = (new $model())->whereName($permission)->first();
+            $permission = Authorization::permission()->whereName($permission)->first();
         }
 
         if ($this->permissions->contains($permission)) {

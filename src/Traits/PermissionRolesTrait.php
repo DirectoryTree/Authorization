@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Larapacks\Authorization\Authorization;
 use SuperClosure\Exception\ClosureUnserializationException;
 
 trait PermissionRolesTrait
@@ -15,7 +16,7 @@ trait PermissionRolesTrait
      */
     public function users()
     {
-        $model = config('authorization.user');
+        $model = get_class(Authorization::user());
 
         return $this->belongsToMany($model);
     }

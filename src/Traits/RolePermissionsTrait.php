@@ -2,8 +2,9 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Larapacks\Authorization\Authorization;
 
 trait RolePermissionsTrait
 {
@@ -24,7 +25,7 @@ trait RolePermissionsTrait
      */
     public function users()
     {
-        $model = config('authorization.user');
+        $model = get_class(Authorization::user());
 
         return $this->belongsToMany($model);
     }
@@ -36,7 +37,7 @@ trait RolePermissionsTrait
      */
     public function permissions()
     {
-        $model = config('authorization.permission');
+        $model = get_class(Authorization::permission());
 
         return $this->belongsToMany($model);
     }
