@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Closure;
 use SuperClosure\Serializer;
 
 trait SerializesClosures
@@ -9,11 +10,11 @@ trait SerializesClosures
     /**
      * Serializes the specified closure.
      *
-     * @param \Closure $closure
+     * @param Closure $closure
      *
      * @return string
      */
-    public function serializeClosure(\Closure $closure)
+    public function serializeClosure(Closure $closure)
     {
         return $this->getClosureSerializer()->serialize($closure);
     }
@@ -23,7 +24,7 @@ trait SerializesClosures
      *
      * @param string $closure
      *
-     * @return \Closure
+     * @return Closure
      */
     public function unserializeClosure($closure)
     {
