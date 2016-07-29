@@ -2,8 +2,8 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Larapacks\Authorization\Authorization;
 
 trait RolePermissionsTrait
