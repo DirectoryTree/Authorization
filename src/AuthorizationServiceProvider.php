@@ -2,10 +2,10 @@
 
 namespace Larapacks\Authorization;
 
-use PDOException;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use PDOException;
 
 class AuthorizationServiceProvider extends ServiceProvider
 {
