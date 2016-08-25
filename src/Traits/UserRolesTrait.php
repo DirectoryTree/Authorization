@@ -2,13 +2,25 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Authorization;
 
 trait UserRolesTrait
 {
     use HasRolesTrait, HasPermissionsTrait;
+
+    /**
+     * Returns true / false if the current user is an administrator.
+     *
+     * @return bool
+     */
+    public function isAdministrator()
+    {
+        $role = $this->roles()->getRelated();
+
+        return $this->hasRole($role::getAdministratorName());
+    }
 
     /**
      * Assign the given role to the user.

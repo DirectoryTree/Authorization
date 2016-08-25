@@ -705,4 +705,25 @@ class AuthorizationTest extends TestCase
 
         $this->assertInstanceOf(Permission::class, Authorization::permission());
     }
+
+    public function test_user_is_administrator()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $userTwo = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $admin = $this->createRole([
+            'name'  => 'administrator',
+            'label' => 'Admin',
+        ]);
+
+        $user->assignRole($admin);
+
+        $this->assertTrue($user->isAdministrator());
+        $this->assertFalse($userTwo->isAdministrator());
+    }
 }
