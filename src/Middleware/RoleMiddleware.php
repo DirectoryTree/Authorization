@@ -4,6 +4,7 @@ namespace Larapacks\Authorization\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\UnauthorizedException;
 
 class RoleMiddleware
 {
@@ -29,7 +30,7 @@ class RoleMiddleware
         $roles = collect($roles);
 
         if (!$request->user()->hasRoles($roles)) {
-            abort(403);
+            throw new UnauthorizedException();
         }
 
         return $next($request);

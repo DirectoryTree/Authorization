@@ -4,6 +4,7 @@ namespace Larapacks\Authorization\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\UnauthorizedException;
 
 class PermissionMiddleware
 {
@@ -29,7 +30,7 @@ class PermissionMiddleware
         $permissions = collect($permissions);
 
         if (!$request->user()->hasPermissions($permissions)) {
-            abort(403);
+            throw new UnauthorizedException();
         }
 
         return $next($request);
