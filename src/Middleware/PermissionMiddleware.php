@@ -3,8 +3,8 @@
 namespace Larapacks\Authorization\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\UnauthorizedException;
+use Illuminate\Http\Request;
 
 class PermissionMiddleware
 {
