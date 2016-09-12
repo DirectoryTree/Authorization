@@ -2,10 +2,10 @@
 
 namespace Larapacks\Authorization;
 
+use PDOException;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use PDOException;
 
 class AuthorizationServiceProvider extends ServiceProvider
 {
@@ -65,10 +65,17 @@ class AuthorizationServiceProvider extends ServiceProvider
     /**
      * Returns a new permission model instance.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     protected function getPermissionsModel()
     {
-        return Authorization::permission();
+        try {
+            return Authorization::permission();
+        } catch (\Exception $e) {
+            // We'll catch any exceptions in case the developer
+            // hasn't created the permission model yet.
+        }
+
+        return;
     }
 }
