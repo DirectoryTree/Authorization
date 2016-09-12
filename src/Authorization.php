@@ -13,7 +13,7 @@ class Authorization
     {
         $model = config('authorization.user');
 
-        return new $model();
+        return class_exists($model) ? new $model() : null;
     }
 
     /**
@@ -25,7 +25,7 @@ class Authorization
     {
         $model = config('authorization.role');
 
-        return new $model();
+        return class_exists($model) ? new $model() : null;
     }
 
     /**
@@ -37,6 +37,6 @@ class Authorization
     {
         $model = config('authorization.permission');
 
-        return new $model();
+        return class_exists($model) ? new $model() : null;
     }
 }
