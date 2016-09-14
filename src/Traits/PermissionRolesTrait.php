@@ -61,7 +61,5 @@ trait PermissionRolesTrait
         } catch (ClosureUnserializationException $e) {
             //
         }
-
-        return;
     }
 }
