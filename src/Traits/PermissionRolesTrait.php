@@ -28,15 +28,7 @@ trait PermissionRolesTrait
      */
     public function hasClosure()
     {
-        try {
-            if ($this->closure) {
-                return true;
-            }
-        } catch (ClosureUnserializationException $e) {
-            //
-        }
-
-        return false;
+        return $this->closure ? true : false;
     }
 
     /**
@@ -60,10 +52,16 @@ trait PermissionRolesTrait
      *
      * @param string $closure
      *
-     * @return \Closure
+     * @return \Closure|null
      */
     public function getClosureAttribute($closure)
     {
-        return $this->unserializeClosure($closure);
+        try {
+            return $this->unserializeClosure($closure);
+        } catch (ClosureUnserializationException $e) {
+            //
+        }
+
+        return;
     }
 }
