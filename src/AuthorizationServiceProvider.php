@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization;
 
+use Larapacks\Authorization\Commands\CreateAdministrator;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -39,6 +40,9 @@ class AuthorizationServiceProvider extends ServiceProvider
 
             $gate->define($permission->name, $closure);
         }
+
+        // Register authorization commands.
+        $this->commands([CreateAdministrator::class]);
     }
 
     /**
