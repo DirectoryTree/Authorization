@@ -726,4 +726,16 @@ class AuthorizationTest extends TestCase
         $this->assertTrue($user->isAdministrator());
         $this->assertFalse($userTwo->isAdministrator());
     }
+
+    public function test_create_role_command()
+    {
+        $this->artisan('create:role', [
+            'name' => 'administrator',
+        ]);
+
+        $this->seeInDatabase('roles', [
+            'name' => 'administrator',
+            'label' => 'Administrator',
+        ]);
+    }
 }
