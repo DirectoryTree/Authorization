@@ -2,8 +2,8 @@
 
 namespace Larapacks\Authorization\Commands;
 
-use Larapacks\Authorization\Authorization;
 use Illuminate\Console\Command;
+use Larapacks\Authorization\Authorization;
 
 class CreateAdministrator extends Command
 {
@@ -36,7 +36,7 @@ class CreateAdministrator extends Command
             $name = $model::getAdministratorName();
 
             $model::forceCreate([
-                'name' => $name,
+                'name'  => $name,
                 'label' => ucfirst($name),
             ]);
 
