@@ -2,8 +2,8 @@
 
 namespace Larapacks\Authorization\Commands;
 
-use Larapacks\Authorization\Authorization;
 use Illuminate\Console\Command;
+use Larapacks\Authorization\Authorization;
 
 class CreateRole extends Command
 {
@@ -36,7 +36,7 @@ class CreateRole extends Command
 
         if (!$exists) {
             $model::forceCreate([
-                'name' => $name,
+                'name'  => $name,
                 'label' => ucfirst($name),
             ]);
 
