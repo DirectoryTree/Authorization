@@ -734,7 +734,7 @@ class AuthorizationTest extends TestCase
         ]);
 
         $this->seeInDatabase('roles', [
-            'name' => 'administrator',
+            'name'  => 'administrator',
             'label' => 'Administrator',
         ]);
     }
