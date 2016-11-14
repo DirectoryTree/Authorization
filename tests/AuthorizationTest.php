@@ -730,7 +730,7 @@ class AuthorizationTest extends TestCase
     public function test_create_role_command()
     {
         $this->artisan('create:role', [
-            'name' => 'administrator',
+            'label' => 'Administrator',
         ]);
 
         $this->seeInDatabase('roles', [
@@ -742,12 +742,12 @@ class AuthorizationTest extends TestCase
     public function test_create_permission_command()
     {
         $this->artisan('create:permission', [
-            'name' => 'manage-users',
+            'label' => 'Manage Users',
         ]);
 
-        $this->seeInDatabase('roles', [
-            'name' => 'administrator',
-            'label' => 'Administrator',
+        $this->seeInDatabase('permissions', [
+            'name' => 'manage-users',
+            'label' => 'Manage Users',
         ]);
     }
 }
