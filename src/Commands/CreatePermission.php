@@ -2,7 +2,6 @@
 
 namespace Larapacks\Authorization\Commands;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Larapacks\Authorization\Authorization;
 
@@ -13,7 +12,7 @@ class CreatePermission extends Command
      *
      * @var string
      */
-    protected $signature = 'create:permission {name}';
+    protected $signature = 'create:permission {label}';
 
     /**
      * The console command description.
@@ -31,17 +30,19 @@ class CreatePermission extends Command
     {
         $model = Authorization::permission();
 
-        $name = $this->argument('name');
+        $label = $this->argument('label');
+
+        $name = str_slug($label);
 
         $exists = $model->whereName($name)->first();
 
         if (!$exists) {
             $model::forceCreate([
                 'name'  => $name,
-                'label' => Str::words($name),
+                'label' => $label,
             ]);
 
-            $this->info('Successfully created permission.');
+            $this->info("Successfully created permission: {$name}.");
         } else {
             $this->error("A permission named {$name} already exists.");
         }
