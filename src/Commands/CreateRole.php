@@ -12,7 +12,7 @@ class CreateRole extends Command
      *
      * @var string
      */
-    protected $signature = 'create:role {name}';
+    protected $signature = 'create:role {label}';
 
     /**
      * The console command description.
@@ -30,19 +30,21 @@ class CreateRole extends Command
     {
         $model = Authorization::role();
 
-        $name = $this->argument('name');
+        $label = $this->argument('label');
+
+        $name = str_slug($label);
 
         $exists = $model->whereName($name)->first();
 
         if (!$exists) {
             $model::forceCreate([
                 'name'  => $name,
-                'label' => ucfirst($name),
+                'label' => $label,
             ]);
 
-            $this->info('Successfully created role.');
+            $this->info("Successfully created role: {$name}.");
         } else {
-            $this->error("A role named {$name} already exists.");
+            $this->error("A role named {$label} already exists.");
         }
     }
 }
