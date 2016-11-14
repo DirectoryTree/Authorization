@@ -738,4 +738,16 @@ class AuthorizationTest extends TestCase
             'label' => 'Administrator',
         ]);
     }
+
+    public function test_create_permission_command()
+    {
+        $this->artisan('create:permission', [
+            'name' => 'manage-users',
+        ]);
+
+        $this->seeInDatabase('roles', [
+            'name' => 'administrator',
+            'label' => 'Administrator',
+        ]);
+    }
 }
