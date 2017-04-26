@@ -44,7 +44,7 @@ The **Role** model:
 ```php
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\RolePermissionsTrait;
@@ -60,7 +60,7 @@ The **Permission** model:
 ```php
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\PermissionRolesTrait;
@@ -74,7 +74,7 @@ class Permission extends Model
 Now insert the `Larapacks\Authorization\Traits\UserRolesTrait` onto your `App\User` model:
 
 ```php
-namespace App\Models;
+namespace App;
 
 use Larapacks\Authorization\Traits\UserRolesTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
