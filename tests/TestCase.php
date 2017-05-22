@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Larapacks\Authorization\AuthorizationServiceProvider;
 use Larapacks\Authorization\Tests\Stubs\Permission;
 use Larapacks\Authorization\Tests\Stubs\Role;
+use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
@@ -36,6 +37,7 @@ class TestCase extends BaseTestCase
     {
         return [
             AuthorizationServiceProvider::class,
+            ConsoleServiceProvider::class
         ];
     }
 
