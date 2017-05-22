@@ -24,9 +24,9 @@ class TestCase extends BaseTestCase
             $table->string('name');
         });
 
-        $this->artisan('migrate', [
-            '--realpath' => realpath(__DIR__.'/../src/Migrations'),
-        ]);
+        $this->loadMigrationsFrom(realpath(__DIR__.'/../src/Migrations'));
+
+        $this->artisan('migrate');
     }
 
     /**
