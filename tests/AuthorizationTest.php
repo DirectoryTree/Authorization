@@ -658,33 +658,6 @@ class AuthorizationTest extends TestCase
         $this->assertFalse($user->can('create-post', 2));
     }
 
-    public function test_closure_permission_fails()
-    {
-        $user = $this->createUser([
-            'name' => 'John Doe',
-        ]);
-
-        $create = new Permission();
-
-        $create->name = 'create-post';
-        $create->label = 'Create Post';
-        $create->closure = function ($user, $id, $otherParameter) {
-            return $user->id == $id;
-        };
-
-        $create->save();
-
-        // Stub the service provider defined ability.
-        Gate::define($create->name, $create->closure);
-
-        $this->assertTrue($user->can('create-post', [1, 'other-parameter']));
-
-        $this->setExpectedException(\ErrorException::class);
-
-        // Missing argument three.
-        $user->can('create-post', [1]);
-    }
-
     public function test_user_helper()
     {
         config()->set('authorization.user', User::class);
