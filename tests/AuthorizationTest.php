@@ -706,10 +706,10 @@ class AuthorizationTest extends TestCase
             'label' => 'Administrator',
         ]);
 
-        $this->seeInDatabase('roles', [
-            'name'  => 'administrator',
-            'label' => 'Administrator',
-        ]);
+        $role = Role::first();
+
+        $this->assertEquals('administrator', $role->name);
+        $this->assertEquals('Administrator', $role->label);
     }
 
     public function test_create_permission_command()
@@ -718,9 +718,9 @@ class AuthorizationTest extends TestCase
             'label' => 'Manage Users',
         ]);
 
-        $this->seeInDatabase('permissions', [
-            'name' => 'manage-users',
-            'label' => 'Manage Users',
-        ]);
+        $permission = Permission::first();
+
+        $this->assertEquals('manage-users', $permission->name);
+        $this->assertEquals('Manage Users', $permission->label);
     }
 }
