@@ -379,3 +379,23 @@ public function boot(GateContract $gate)
 Now all your dynamic logic is stored inside the database, and your clean logic is stored inside the `AuthServiceProvider`.
 
 Neat huh?
+
+### Running Tests
+
+To run your applications tests, inside your `TestCase::setUp()` method, you'll instantiate
+the `PermissionRegistrar` before running your tests for permissions to register properly:
+
+```php
+use Larapacks\Authorization\PermissionRegistrar;
+```
+
+```php
+public function setUp()
+{
+    parent::setUp();
+    
+    $registrar = app(PermissionResistrar::class);
+    
+    $registrar->register();
+}
+```
