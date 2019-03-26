@@ -5,38 +5,97 @@ namespace Larapacks\Authorization;
 class Authorization
 {
     /**
-     * Returns the user model.
+     * Indicates if Authorization migrations will be run.
+     *
+     * @var bool
+     */
+    public static $runsMigrations = true;
+
+    /**
+     * Indicates if Authorization will register permissions into the gate.
+     *
+     * @var bool
+     */
+    public static $registersInGate = true;
+
+    /**
+     * The user model class name.
+     *
+     * @var string
+     */
+    public static $userModel = 'App\User';
+
+    /**
+     * The role model class name.
+     *
+     * @var string
+     */
+    public static $roleModel = 'Larapacks\Authorization\Role';
+
+    /**
+     * The permission model class name.
+     *
+     * @var string
+     */
+    public static $permissionModel = 'Larapacks\Authorization\Permission';
+
+    /**
+     * Get the user model class name.
+     *
+     * @return string
+     */
+    public static function userModel()
+    {
+        return static::$userModel;
+    }
+
+    /**
+     * Get a new user model instance.
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public static function user()
     {
-        $model = config('authorization.user');
-
-        return class_exists($model) ? new $model() : null;
+        return new static::$userModel;
     }
 
     /**
-     * Returns the role model.
+     * Get the role model class name.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return string
+     */
+    public static function roleModel()
+    {
+        return static::$roleModel;
+    }
+
+    /**
+     * Get a new role model instance.
+     *
+     * @return Role
      */
     public static function role()
     {
-        $model = config('authorization.role');
-
-        return class_exists($model) ? new $model() : null;
+        return new static::$roleModel;
     }
 
     /**
-     * Returns the permission model.
+     * Get the permission model class name.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return string
+     */
+    public static function permissionModel()
+    {
+        return static::$permissionModel;
+    }
+
+    /**
+     * Get a new permission model instance.
+     *
+     * @return Permission
      */
     public static function permission()
     {
-        $model = config('authorization.permission');
-
-        return class_exists($model) ? new $model() : null;
+        return new static::$permissionModel;
     }
 }
