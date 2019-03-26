@@ -26,9 +26,7 @@ class PermissionMiddleware
             $permissions = array_slice($args, 2);
         }
 
-        $permissions = collect($permissions);
-
-        if (!$request->user()->hasPermissions($permissions)) {
+        if (! $request->user()->hasPermissions($permissions)) {
             abort(403, 'Unauthorized.');
         }
 

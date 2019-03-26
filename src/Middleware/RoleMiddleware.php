@@ -26,9 +26,7 @@ class RoleMiddleware
             $roles = array_slice($args, 2);
         }
 
-        $roles = collect($roles);
-
-        if (!$request->user()->hasRoles($roles)) {
+        if (! $request->user()->hasRoles($roles)) {
             abort(403, 'Unauthorized.');
         }
 
