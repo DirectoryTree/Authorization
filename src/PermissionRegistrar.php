@@ -3,11 +3,17 @@
 namespace Larapacks\Authorization;
 
 use PDOException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Access\Gate;
 
 class PermissionRegistrar
 {
+    /**
+     * The auth gate.
+     *
+     * @var Gate
+     */
+    protected $gate;
+
     /**
      * PermissionRegistrar constructor.
      *
@@ -27,11 +33,9 @@ class PermissionRegistrar
     {
         // Dynamically register permissions with Laravel's Gate.
         foreach ($this->getPermissions() as $permission) {
-            $closure = ($permission->hasClosure() ? $permission->closure : function ($user) use ($permission) {
+            $this->gate->define($permission->name, function ($user) use ($permission) {
                 return $user->hasPermission($permission);
             });
-
-            $this->gate->define($permission->name, $closure);
         }
     }
 
@@ -43,26 +47,12 @@ class PermissionRegistrar
     protected function getPermissions()
     {
         try {
-            $model = $this->getPermissionsModel();
-
-            if ($model instanceof Model) {
-                return $model->with('roles')->get();
-            }
+            return Authorization::permission()->get();
         } catch (PDOException $e) {
             // We catch PDOExceptions here in case the developer
             // hasn't migrated authorization tables yet.
         }
 
         return [];
-    }
-
-    /**
-     * Returns a new permission model instance.
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    protected function getPermissionsModel()
-    {
-        return Authorization::permission();
     }
 }
