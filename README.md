@@ -51,6 +51,20 @@ If you would not like to use Authorizations default migrations, you should call 
 `AppServiceProvider`. You may export the default migrations using
 `php artisan vendor:publish --tag=authorization-migrations`.
 
+```php
+use Larapacks\Authorization\Authorization;
+
+/**
+ * Bootstrap any application services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    Authorization::ignoreMigrations();
+}
+```
+
 ### Model Customization
 
 By default, the `App\User` class is registered as the authorizable user model.
