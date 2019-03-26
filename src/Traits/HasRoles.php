@@ -4,17 +4,15 @@ namespace Larapacks\Authorization\Traits;
 
 use Larapacks\Authorization\Authorization;
 
-trait HasRolesTrait
+trait HasRoles
 {
     /**
-     * A model may have multiple roles.
+     * The belongsToMany roles relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function roles()
     {
-        $model = get_class(Authorization::role());
-
-        return $this->belongsToMany($model);
+        return $this->belongsToMany(Authorization::roleModel());
     }
 }
