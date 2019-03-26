@@ -2,25 +2,13 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Authorization;
 
-trait UserRolesTrait
+trait Authorizable
 {
-    use HasRolesTrait, HasPermissionsTrait;
-
-    /**
-     * Returns true / false if the current user is an administrator.
-     *
-     * @return bool
-     */
-    public function isAdministrator()
-    {
-        $role = $this->roles()->getRelated();
-
-        return $this->hasRole($role::getAdministratorName());
-    }
+    use HasRoles, HasPermissions;
 
     /**
      * Assign the given role to the user.
@@ -31,8 +19,8 @@ trait UserRolesTrait
      */
     public function assignRole($role)
     {
-        if (!$role instanceof Model) {
-            $role = $this->roles()->getRelated()->whereName($role)->firstOrFail();
+        if (! $role instanceof Model) {
+            $role = Authorization::role()->whereName($role)->firstOrFail();
         }
 
         return $this->roles()->save($role);
@@ -43,12 +31,12 @@ trait UserRolesTrait
      *
      * @param string|Model $role
      *
-     * @return Model
+     * @return int
      */
     public function removeRole($role)
     {
-        if (!$role instanceof Model) {
-            $role = $this->roles()->getRelated()->whereName($role)->firstOrFail();
+        if (! $role instanceof Model) {
+            $role = Authorization::role()->whereName($role)->firstOrFail();
         }
 
         return $this->roles()->detach($role);
@@ -68,7 +56,7 @@ trait UserRolesTrait
         }
 
         if ($role instanceof Model) {
-            return $this->roles->contains($role);
+            return $this->roles()->find($role->getKey()) instanceof Model;
         }
 
         return false;
@@ -83,17 +71,13 @@ trait UserRolesTrait
      */
     public function hasRoles($roles)
     {
-        if (!$roles instanceof Collection) {
+        if (! $roles instanceof Collection) {
             $roles = collect($roles);
         }
 
-        $roles = collect($roles);
-
-        $count = $roles->count();
-
         return $roles->filter(function ($role) {
             return $this->hasRole($role);
-        })->count() === $count;
+        })->count() === $roles->count();
     }
 
     /**
@@ -105,11 +89,9 @@ trait UserRolesTrait
      */
     public function hasAnyRoles($roles)
     {
-        if (!$roles instanceof Collection) {
+        if (! $roles instanceof Collection) {
             $roles = collect($roles);
         }
-
-        $roles = collect($roles);
 
         return $roles->filter(function ($role) {
             return $this->hasRole($role);
@@ -130,18 +112,23 @@ trait UserRolesTrait
             $permission = Authorization::permission()->whereName($permission)->first();
         }
 
-        if ($this->permissions->contains($permission)) {
-            return true;
-        }
-
         if ($permission instanceof Model) {
-            $roles = $permission->roles;
-
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
+            // We'll first check to see if the user was given this explicit permission.
+            if ($this->permissions()->find($permission->getKey())) {
+                return true;
             }
+
+            // Otherwise, we'll determine their permission by gathering
+            // the roles that the permission belongs to and checking
+            // if the user is a member of any of the roles.
+            $roles = $permission->roles()->get()->map(function ($role) {
+                return $role->getKey();
+            });
+
+            // Determine if the user is a member of any of the permissions roles.
+            return $this->roles()
+                    ->whereIn($this->roles()->getRelatedPivotKeyName(), $roles)
+                    ->count() > 0;
         }
 
         return false;
@@ -157,15 +144,13 @@ trait UserRolesTrait
      */
     public function hasPermissions($permissions)
     {
-        if (!$permissions instanceof Collection) {
+        if (! $permissions instanceof Collection) {
             $permissions = collect($permissions);
         }
 
-        $count = $permissions->count();
-
         return $permissions->filter(function ($permission) {
             return $this->hasPermission($permission);
-        })->count() === $count;
+        })->count() ===  $permissions->count();
     }
 
     /**
@@ -178,7 +163,7 @@ trait UserRolesTrait
      */
     public function hasAnyPermissions($permissions)
     {
-        if (!$permissions instanceof Collection) {
+        if (! $permissions instanceof Collection) {
             $permissions = collect($permissions);
         }
 
@@ -196,7 +181,7 @@ trait UserRolesTrait
      */
     public function doesNotHavePermission($permission)
     {
-        return !$this->hasPermission($permission);
+        return ! $this->hasPermission($permission);
     }
 
     /**
@@ -209,7 +194,7 @@ trait UserRolesTrait
      */
     public function doesNotHavePermissions($permissions)
     {
-        return !$this->hasPermissions($permissions);
+        return ! $this->hasPermissions($permissions);
     }
 
     /**
@@ -222,6 +207,6 @@ trait UserRolesTrait
      */
     public function doesNotHaveAnyPermissions($permissions)
     {
-        return !$this->hasAnyPermissions($permissions);
+        return ! $this->hasAnyPermissions($permissions);
     }
 }
