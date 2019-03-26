@@ -8,106 +8,102 @@
 
 An easy, native role / permission management system for Laravel.
 
-Authorization automatically adds your database permissions and roles to the `Illuminate\Auth\Access\Gate`, this means
-that you can utilize all native laravel policies and methods for authorization.
-
-This also means you're not walled into using this package if you decide it's not for you. 
+Authorization automatically adds your database permissions and roles to
+the `Illuminate\Auth\Access\Gate`, this means that you can utilize
+all native Laravel policies and methods for authorization.
 
 ## Installation
 
-Insert Authorization in your `composer.json` file:
+To get started, install Authorization via the Composer package manager:
 
-```json
-"larapacks/authorization": "1.1.*"
-```
+    composer require larapacks/authorization
 
-Then run `composer update`.
+The Authorization service provider registers its own database migration directory
+with the framework, so you should migrate your database after installing the
+package. The Authorization migrations will create the tables your
+application needs to store roles and permissions: 
 
-Insert the service provider in your `config/app.php` file:
+    php artisan migrate
 
-```php
-Larapacks\Authorization\AuthorizationServiceProvider::class,
-```
-
-Once that's complete, publish the migrations using:
-
-```php
-php artisan vendor:publish --tag="authorization"
-```
-
-Then run `php artisan migrate`.
-
-Once you've done the migrations, create the following two models and insert the relevant trait:
-
-The **Role** model:
+Now insert the `Larapacks\Authorization\Traits\Authorizable` onto your `App\User` model:
 
 ```php
 <?php
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\RolePermissionsTrait;
-
-class Role extends Model
-{
-    use RolePermissionsTrait;
-}
-```
-
-The **Permission** model:
-
-```php
-<?php
-
-namespace App;
-
-use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\PermissionRolesTrait;
-
-class Permission extends Model
-{
-    use PermissionRolesTrait;
-}
-```
-
-Now insert the `Larapacks\Authorization\Traits\UserRolesTrait` onto your `App\User` model:
-
-```php
-namespace App;
-
-use Larapacks\Authorization\Traits\UserRolesTrait;
+use Larapacks\Authorization\Traits\Authorizable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use UserRolesTrait;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    use Notifiable, Authorizable;
 }
 ```
 
-You're all set!
+You can now perform user authorization.
+
+### Migration Customization
+
+If you would not like to use Authorizations default migrations, you should call the
+`Authorization::ignoreMigrations` method in the `register` method of your
+`AppServiceProvider`. You may export the default migrations using
+`php artisan vendor:publish --tag=authorization-migrations`.
+
+### Model Customization
+
+By default, the `App\User` class is registered as the authorizable user model.
+
+You're free to extend the models used internally by Authorization.
+
+Instruct Authorization to use your own models via the `Authorization` class in your `AuthServiceProvider`:
+
+```php
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Permission;
+use Larapacks\Authorization\Authorization;
+
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this->registerPolicies();
+
+    Authorization::useUserModel(User::class);
+    Authorization::useRoleModel(Role::class);
+    Authorization::usePermissionModel(Permission::class);
+}
+```
+
+Be sure to add the relevant traits for each of your custom models:
+
+**Role Model**:
+```php
+use Larapacks\Authorization\Traits\ManagesPermissions;
+
+class Role extends Model
+{
+    use ManagesPermissions;
+```
+
+**Permission Model**:
+```php
+use Larapacks\Authorization\Traits\HasUsers;
+use Larapacks\Authorization\Traits\HasRoles;
+
+class Permission extends Model
+{
+    use HasUsers, HasRoles;
+```
 
 ## Usage
 
-Using authorization is easy, because it's utilizing native laravel relationships.
+Authorization utilizes native Laravel relationships, so there's no need to learn a new API.
 
 Create a permission:
 
@@ -152,7 +148,7 @@ $createUsers->save();
 $user->permissions()->save($createUsers);
 ```
 
-### Performing Authorization (Native)
+### Checking Permissions & Roles
 
 ```php
 // Using Laravel's native `can()` method:
@@ -183,7 +179,7 @@ if (Gate::allows('users.create')) {
 @endcan
 ```
 
-### Performing Authorization (Package Specific)
+### Checking Permissions & Roles (Authorization Specific)
 
 Checking for permission:
 
@@ -273,10 +269,9 @@ protected $routeMiddleware = [
 ];
 ```
 
-Once you've done that, you can start using them.
+Once you've added them, you can start using them.
 
-> **Note**: When a user does not meet the requirements using the middleware,
-> a 403 HTTP exception is thrown.
+> **Note**: When a user does not meet the requirements using the middleware, a 403 HTTP exception is thrown.
 
 To guard a route to only allow specific permissions:
 
@@ -308,78 +303,6 @@ Route::get('users', [
 ]);
 ```
 
-### Closure Permissions
-
-> **Note:** This feature was introduced in `v1.1.0`.
-
-Problem:
-
-You need database permissions but you need logic in some permissions as well.
-
-For example, if a user creates a post, only that user should be able to edit it, as well as administrators.
-
-To include this logic into gate abilities, your options are:
-
-- Define gate abilities in the service provider with the logic (which can get cluttered and become an organizational mess)
-- Define policy classes and have a mix of database abilities with policies (more mess)
-- Policies then need to be bound to a model, and if we don't have a model, we
- need to call the `policy()` helper method, and throw our own authorization exception (more confusion)
-
-Solution:
-
-Store all abilities in the database including ones that require logic and utilize native laravel methods for all authorization.
-
-Here's how it's done:
-
-```php
-// Create the closure permission
-
-$permission = new Permission();
-
-$permission->name = "posts.edit";
-$permission->label = "Edit Posts";
-$permission->closure = function ($user, $post) {
-    return $user->id == $post->user_id || $user->hasRole('admin');
-};
-
-$permission->save();
-```
-
-Use native laravel authorization:
-
-```php
-public function edit($id)
-{
-    $post = Post::findOrFail($id);
-    
-    $this->authorize('posts.edit', [$post]);
-    
-    return view('posts.edit', compact('post'));
-}
-```
-
-It's not necessary to save the permission onto the user because the logic is inside
-the permission itself to determine whether or not the user can perform the ability.
-
-> That's great and all, but I need access to be able to bypass these checks if the user is an administrator!
-
-No problem, just go into your native `app/Providers/AuthServiceProvider` and define that explicitly in the gate.
-
-```php
-public function boot(GateContract $gate)
-{
-    $this->registerPolicies($gate);
-    
-    $gate->before(function ($user) {
-        return ($user->hasRole('administrator') ?: null);
-    });
-}
-```
-
-Now all your dynamic logic is stored inside the database, and your clean logic is stored inside the `AuthServiceProvider`.
-
-Neat huh?
-
 ### Running Tests
 
 To run your applications tests, inside your `TestCase::setUp()` method, you'll instantiate
@@ -394,8 +317,6 @@ public function setUp()
 {
     parent::setUp();
     
-    $registrar = app(PermissionResistrar::class);
-    
-    $registrar->register();
+    app(PermissionResistrar::class)->register();
 }
 ```
