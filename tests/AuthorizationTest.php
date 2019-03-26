@@ -3,16 +3,13 @@
 namespace Larapacks\Authorization\Tests;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Gate;
 use Larapacks\Authorization\Authorization;
-use Larapacks\Authorization\Tests\Stubs\Permission;
-use Larapacks\Authorization\Tests\Stubs\Role;
 use Larapacks\Authorization\Tests\Stubs\User;
 
 class AuthorizationTest extends TestCase
 {
     /**
-     * Returns a new user instance.
+     * Returns a new stub user instance.
      *
      * @param array $attributes
      *
@@ -28,11 +25,13 @@ class AuthorizationTest extends TestCase
      *
      * @param array $attributes
      *
-     * @return Role
+     * @return \Larapacks\Authorization\Role
      */
     protected function createRole($attributes = [])
     {
-        return Role::create($attributes);
+        $role = Authorization::role();
+
+        return $role::create($attributes);
     }
 
     /**
@@ -40,11 +39,13 @@ class AuthorizationTest extends TestCase
      *
      * @param array $attributes
      *
-     * @return Permission
+     * @return \Larapacks\Authorization\Permission
      */
     protected function createPermission($attributes = [])
     {
-        return Permission::create($attributes);
+        $permission = Authorization::permission();
+
+        return $permission::create($attributes);
     }
 
     public function test_assign_role()
@@ -143,7 +144,7 @@ class AuthorizationTest extends TestCase
             'label' => 'Create Users',
         ]);
 
-        $this->assertInstanceOf(Permission::class, $admin->grant($createUsers));
+        $this->assertInstanceOf(Authorization::permissionModel(), $admin->grant($createUsers));
         $this->assertTrue($user->hasPermission($createUsers));
     }
 
@@ -224,7 +225,7 @@ class AuthorizationTest extends TestCase
 
         $admin->grant($createUsers);
 
-        $this->assertInstanceOf(Permission::class, $admin->revoke($createUsers));
+        $this->assertInstanceOf(Authorization::permissionModel(), $admin->revoke($createUsers));
     }
 
     public function test_revoke_multiple_permissions()
@@ -613,8 +614,8 @@ class AuthorizationTest extends TestCase
             'label' => 'Edit Specific User',
         ]);
 
-        $this->assertInstanceOf(Permission::class, $admin->grant($editUser));
-        $this->assertInstanceOf(Permission::class, $admin->grant($editUser));
+        $this->assertInstanceOf(Authorization::permissionModel(), $admin->grant($editUser));
+        $this->assertInstanceOf(Authorization::permissionModel(), $admin->grant($editUser));
     }
 
     public function test_revoking_same_permissions()
@@ -631,96 +632,7 @@ class AuthorizationTest extends TestCase
 
         $admin->grant($editUser);
 
-        $this->assertInstanceOf(Permission::class, $admin->revoke($editUser));
-        $this->assertInstanceOf(Permission::class, $admin->revoke($editUser));
-    }
-
-    public function test_closure_permission()
-    {
-        $user = $this->createUser([
-            'name' => 'John Doe',
-        ]);
-
-        $create = new Permission();
-
-        $create->name = 'create-post';
-        $create->label = 'Create Post';
-        $create->closure = function ($user, $id) {
-            return $user->id == $id;
-        };
-
-        $create->save();
-
-        // Stub the service provider defined ability.
-        Gate::define($create->name, $create->closure);
-
-        $this->assertTrue($user->can('create-post', 1));
-        $this->assertFalse($user->can('create-post', 2));
-    }
-
-    public function test_user_helper()
-    {
-        config()->set('authorization.user', User::class);
-
-        $this->assertInstanceOf(User::class, Authorization::user());
-    }
-
-    public function test_role_helper()
-    {
-        config()->set('authorization.role', Role::class);
-
-        $this->assertInstanceOf(Role::class, Authorization::role());
-    }
-
-    public function test_permission_helper()
-    {
-        config()->set('authorization.permission', Permission::class);
-
-        $this->assertInstanceOf(Permission::class, Authorization::permission());
-    }
-
-    public function test_user_is_administrator()
-    {
-        $user = $this->createUser([
-            'name' => 'John Doe',
-        ]);
-
-        $userTwo = $this->createUser([
-            'name' => 'John Doe',
-        ]);
-
-        $admin = $this->createRole([
-            'name'  => 'administrator',
-            'label' => 'Admin',
-        ]);
-
-        $user->assignRole($admin);
-
-        $this->assertTrue($user->isAdministrator());
-        $this->assertFalse($userTwo->isAdministrator());
-    }
-
-    public function test_create_role_command()
-    {
-        $this->artisan('create:role', [
-            'label' => 'Administrator',
-        ]);
-
-        $role = Role::first();
-
-        $this->assertEquals('administrator', $role->name);
-        $this->assertEquals('Administrator', $role->label);
-    }
-
-    public function test_create_permission_command()
-    {
-        $this->artisan('create:permission', [
-            'label' => 'Manage Users',
-        ]);
-
-        $permission = Permission::first();
-
-        $this->assertEquals('manage-users', $permission->name);
-        $this->assertEquals('Manage Users', $permission->label);
+        $this->assertInstanceOf(Authorization::permissionModel(), $admin->revoke($editUser));
+        $this->assertInstanceOf(Authorization::permissionModel(), $admin->revoke($editUser));
     }
 }

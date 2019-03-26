@@ -3,31 +3,24 @@
 namespace Larapacks\Authorization\Tests;
 
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Larapacks\Authorization\AuthorizationServiceProvider;
-use Larapacks\Authorization\Tests\Stubs\Permission;
-use Larapacks\Authorization\Tests\Stubs\Role;
-use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function setUp()
+    use RefreshDatabase;
+
+    public function setUp(): void
     {
         parent::setUp();
 
-        // Create the users table for testing
+        // Create the users table for testing.
         Schema::create('users', function ($table) {
             $table->increments('id');
-            $table->timestamps();
             $table->string('name');
+            $table->timestamps();
         });
-
-        $this->loadMigrationsFrom(realpath(__DIR__.'/../src/Migrations'));
-
-        $this->artisan('migrate');
     }
 
     /**
@@ -37,25 +30,6 @@ class TestCase extends BaseTestCase
     {
         return [
             AuthorizationServiceProvider::class,
-            ConsoleServiceProvider::class
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
-
-        $app['config']->set('authorization.role', Role::class);
-        $app['config']->set('authorization.permission', Permission::class);
     }
 }

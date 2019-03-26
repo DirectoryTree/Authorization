@@ -3,11 +3,11 @@
 namespace Larapacks\Authorization\Tests\Stubs;
 
 use Illuminate\Foundation\Auth\User as BaseUser;
-use Larapacks\Authorization\Traits\UserRolesTrait;
+use Larapacks\Authorization\Traits\Authorizable;
 
 class User extends BaseUser
 {
-    use UserRolesTrait;
+    use Authorizable;
 
     protected $fillable = [
         'name',
