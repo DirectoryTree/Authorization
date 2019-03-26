@@ -2,55 +2,12 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Larapacks\Authorization\Authorization;
+use Illuminate\Database\Eloquent\Model;
 
-trait RolePermissionsTrait
+trait ManagesPermissions
 {
-    /**
-     * Returns the administrators name.
-     *
-     * @return string
-     */
-    public static function getAdministratorName()
-    {
-        return 'administrator';
-    }
-
-    /**
-     * A role may have many users.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function users()
-    {
-        $model = get_class(Authorization::user());
-
-        return $this->belongsToMany($model);
-    }
-
-    /**
-     * A role may be given various permissions.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function permissions()
-    {
-        $model = get_class(Authorization::permission());
-
-        return $this->belongsToMany($model);
-    }
-
-    /**
-     * Returns true / false if the current role is an administrator.
-     *
-     * @return bool
-     */
-    public function isAdministrator()
-    {
-        return $this->name === self::getAdministratorName();
-    }
+    use HasPermissions, HasUsers;
 
     /**
      * Returns true / false if the current role has the specified permission.
@@ -66,7 +23,7 @@ trait RolePermissionsTrait
         }
 
         if ($permission instanceof Model) {
-            return $this->permissions->contains($permission);
+            return $this->permissions()->get()->contains($permission);
         }
 
         return false;
@@ -75,23 +32,19 @@ trait RolePermissionsTrait
     /**
      * Returns true / false if the current role has the specified permissions.
      *
-     * @param array $permissions
+     * @param string|array $permissions
      *
      * @return bool
      */
     public function hasPermissions($permissions)
     {
-        if (!is_array($permissions)) {
+        if (! is_array($permissions)) {
             $permissions = [$permissions];
         }
 
-        $permissions = collect($permissions);
-
-        $count = $permissions->count();
-
-        return $permissions->filter(function ($permission) {
+        return collect($permissions)->filter(function ($permission) {
             return $this->hasPermission($permission);
-        })->count() === $count;
+        })->count() === count($permissions);
     }
 
     /**
@@ -103,13 +56,11 @@ trait RolePermissionsTrait
      */
     public function hasAnyPermissions($permissions)
     {
-        if (!is_array($permissions)) {
+        if (! is_array($permissions)) {
             $permissions = [$permissions];
         }
 
-        $permissions = collect($permissions);
-
-        return $permissions->filter(function ($permission) {
+        return collect($permissions)->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->count() > 0;
     }
@@ -126,14 +77,11 @@ trait RolePermissionsTrait
     public function grant($permissions)
     {
         if ($permissions instanceof Model) {
-            // Verify if the role already has the permission.
-            if ($this->hasPermission($permissions->name)) {
+            if ($this->hasPermission($permissions)) {
                 return $permissions;
             }
 
-            if ($this->permissions()->save($permissions) instanceof Model) {
-                return $permissions;
-            }
+            return $this->permissions()->save($permissions);
         } elseif (is_array($permissions)) {
             $permissions = collect($permissions);
         }
@@ -159,7 +107,7 @@ trait RolePermissionsTrait
     public function revoke($permissions)
     {
         if ($permissions instanceof Model) {
-            if (!$this->hasPermission($permissions->name)) {
+            if (! $this->hasPermission($permissions)) {
                 return $permissions;
             }
 
