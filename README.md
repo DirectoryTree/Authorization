@@ -55,11 +55,11 @@ If you would not like to use Authorizations default migrations, you should call 
 use Larapacks\Authorization\Authorization;
 
 /**
- * Bootstrap any application services.
+ * Register any application services.
  *
  * @return void
  */
-public function boot()
+public function register()
 {
     Authorization::ignoreMigrations();
 }
