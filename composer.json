@@ -5,14 +5,12 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=5.5.9",
-    "illuminate/database": "~5.0",
-    "jeremeamia/SuperClosure": "2.3.*"
+    "php": ">=7.0",
+    "illuminate/database": "^5.0"
   },
   "require-dev": {
-    "orchestra/testbench": "~3.0",
-    "orchestra/database": "~3.1",
-    "phpunit/phpunit": "~4.0|~5.0"
+    "orchestra/testbench": "^3.7",
+    "phpunit/phpunit": "^7.0"
   },
   "autoload": {
     "psr-4": {
@@ -22,12 +20,13 @@
   "autoload-dev": {
     "psr-4": {
       "Larapacks\\Authorization\\Tests\\": "tests/"
-    },
-    "classmap": [
-      "tests/TestCase.php"
-    ]
+    }
   },
-  "config": {
-    "preferred-install": "dist"
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Larapacks\\Authorization\\AuthorizationServiceProvider"
+      ]
+    }
   }
 }
