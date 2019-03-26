@@ -40,6 +40,16 @@ class Authorization
     public static $permissionModel = 'Larapacks\Authorization\Permission';
 
     /**
+     * Set the user model class name.
+     *
+     * @param $userModel
+     */
+    public static function useUserModel($userModel)
+    {
+        static::$userModel = $userModel;
+    }
+
+    /**
      * Get the user model class name.
      *
      * @return string
@@ -57,6 +67,16 @@ class Authorization
     public static function user()
     {
         return new static::$userModel;
+    }
+
+    /**
+     * Set the role model class name.
+     *
+     * @param $roleModel
+     */
+    public static function useRoleModel($roleModel)
+    {
+        static::$roleModel = $roleModel;
     }
 
     /**
@@ -80,6 +100,16 @@ class Authorization
     }
 
     /**
+     * Set the permission model class name.
+     *
+     * @param $permissionModel
+     */
+    public static function usePermissionModel($permissionModel)
+    {
+        static::$permissionModel = $permissionModel;
+    }
+
+    /**
      * Get the permission model class name.
      *
      * @return string
@@ -97,5 +127,17 @@ class Authorization
     public static function permission()
     {
         return new static::$permissionModel;
+    }
+
+    /**
+     * Configure Authorization to not register its migrations.
+     *
+     * @return Authorization
+     */
+    public static function ignoreMigrations()
+    {
+        static::$runsMigrations = false;
+
+        return new static;
     }
 }
