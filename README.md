@@ -8,10 +8,6 @@
 
 An easy, native role / permission management system for Laravel.
 
-Authorization automatically adds your database permissions and roles to
-the `Illuminate\Auth\Access\Gate`, this means that you can utilize
-all native Laravel policies and methods for authorization.
-
 ## Installation
 
 To get started, install Authorization via the Composer package manager:
