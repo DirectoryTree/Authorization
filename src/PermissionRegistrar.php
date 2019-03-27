@@ -68,7 +68,7 @@ class PermissionRegistrar
     {
         try {
             return $this->cache->remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
-                Authorization::permission()->get();
+                return Authorization::permission()->get();
             });
         } catch (PDOException $e) {
             // We catch PDOExceptions here in case the developer
