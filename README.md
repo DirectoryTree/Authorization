@@ -258,7 +258,9 @@ if (auth()->user()->hasAnyRoles(['administrator', 'member', 'guest'])) {
 
 ### Caching
 
-By default all permissions are cached to prevent them from being retrieved on every user request.
+By default all permissions are cached to prevent them from being retrieved on every request.
+
+This cache is automatically flushed when permissions are created, updated, or deleted.
 
 If you would like to disable the cache, call `Authorization::disablePermissionCache` in your `AuthServiceProvider`:
 
