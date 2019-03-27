@@ -50,21 +50,11 @@ class PermissionRegistrar
     }
 
     /**
-     * Flushes the permission cache.
-     *
-     * @return void
-     */
-    public function flushCache()
-    {
-        $this->cache->forget(Authorization::cacheKey());
-    }
-
-    /**
-     * Fetch the collection of site permissions.
+     * Fetch the collection of permissions.
      *
      * @return \Illuminate\Database\Eloquent\Collection|array
      */
-    protected function getPermissions()
+    public function getPermissions()
     {
         try {
             return $this->cache->remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
@@ -75,5 +65,15 @@ class PermissionRegistrar
         }
 
         return [];
+    }
+
+    /**
+     * Flushes the permission cache.
+     *
+     * @return void
+     */
+    public function flushCache()
+    {
+        $this->cache->forget(Authorization::cacheKey());
     }
 }
