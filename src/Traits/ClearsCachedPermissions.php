@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Larapacks\Authorization\Authorization;
 use Larapacks\Authorization\PermissionRegistrar;
 
 trait ClearsCachedPermissions
@@ -13,12 +14,14 @@ trait ClearsCachedPermissions
      */
     public static function bootClearsCachedPermissions()
     {
-        static::saved(function () {
-            app(PermissionRegistrar::class)->flushCache();
-        });
+        if (Authorization::$cachesPermissions) {
+            static::saved(function () {
+                app(PermissionRegistrar::class)->flushCache();
+            });
 
-        static::deleted(function () {
-            app(PermissionRegistrar::class)->flushCache();
-        });
+            static::deleted(function () {
+                app(PermissionRegistrar::class)->flushCache();
+            });
+        }
     }
 }
