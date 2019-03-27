@@ -189,6 +189,18 @@ class Authorization
     }
 
     /**
+     * Configure Authorization to not register in the auth gate.
+     *
+     * @return static
+     */
+    public function disableGateRegistration()
+    {
+        static::$registersInGate = false;
+
+        return new static;
+    }
+
+    /**
      * Configure Authorization to not cache permissions.
      *
      * @return static
