@@ -189,6 +189,18 @@ class Authorization
     }
 
     /**
+     * Configure Authorization to not cache permissions.
+     *
+     * @return static
+     */
+    public static function disablePermissionCache()
+    {
+        static::$cachesPermissions = false;
+
+        return new static;
+    }
+
+    /**
      * Configure Authorization to not register its migrations.
      *
      * @return static

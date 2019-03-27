@@ -57,9 +57,13 @@ class PermissionRegistrar
     public function getPermissions()
     {
         try {
-            return $this->cache->remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
-                return Authorization::permission()->get();
-            });
+            if (Authorization::$cachesPermissions) {
+                return $this->cache->remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
+                    return Authorization::permission()->get();
+                });
+            }
+
+            return Authorization::permission()->get();
         } catch (PDOException $e) {
             // Migrations haven't been ran yet.
         }

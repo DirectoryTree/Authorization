@@ -652,7 +652,106 @@ class AuthorizationTest extends TestCase
 
         $keys = $permissions->map->id;
 
-        $this->assertEquals($keys, app(PermissionRegistrar::class)->getPermissions()->map->id);
-        $this->assertEquals($keys, cache(Authorization::cacheKey())->map->id);
+        $this->assertEquals($keys, app(PermissionRegistrar::class)->getPermissions()->map->getKey());
+        $this->assertEquals($keys, cache(Authorization::cacheKey())->map->getKey());
+    }
+
+    public function test_permission_cache_is_flushed_when_permissions_are_created()
+    {
+        $p = $this->createPermission([
+            'name'  => 'create',
+            'label' => 'Create',
+        ]);
+
+        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+        $this->assertEquals($p->getKey(), cache(Authorization::cacheKey())->first()->getKey());
+
+        $this->createPermission([
+            'name'  => 'edit',
+            'label' => 'Edit',
+        ]);
+
+        $this->assertNull(cache(Authorization::cacheKey()));
+    }
+
+    public function test_permission_cache_is_flushed_when_permissions_are_updated()
+    {
+        $p = $this->createPermission([
+            'name'  => 'create',
+            'label' => 'Create',
+        ]);
+
+        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+
+        $p->update(['name' => 'edit', 'label' => 'Edit']);
+
+        $this->assertNull(cache(Authorization::cacheKey()));
+    }
+
+    public function test_permission_cache_is_flushed_when_permissions_are_deleted()
+    {
+        $p = $this->createPermission([
+            'name'  => 'create',
+            'label' => 'Create',
+        ]);
+
+        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+
+        $p->delete();
+
+        $this->assertNull(cache(Authorization::cacheKey()));
+    }
+
+    public function test_permission_cache_is_flushed_when_permissions_are_added_to_role()
+    {
+        $p = $this->createPermission(['name' => 'create', 'label' => 'Create']);
+
+        $r = $this->createRole(['name' => 'admin', 'label' => 'Administrator']);
+
+        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+        $this->assertEquals($p->getKey(), cache(Authorization::cacheKey())->first()->getKey());
+
+        $r->permissions()->save($p);
+
+        $this->assertNull(cache(Authorization::cacheKey()));
+    }
+
+    public function test_user_does_not_have_permission_with_cached_permissions()
+    {
+        $u = $this->createUser(['name' => 'John Doe']);
+
+        $p = $this->createPermission(['name' => 'create', 'label' => 'Create']);
+
+        $r = $this->createRole(['name' => 'admin', 'label' => 'Administrator']);
+
+        // Attach the permission to the role.
+        $r->permissions()->attach($p);
+
+        // Attach the role to the user.
+        $u->roles()->attach($r);
+
+        // User has permission.
+        $this->assertTrue($u->hasPermission($p));
+        $this->assertTrue($u->hasPermission('create'));
+
+        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+        $this->assertEquals($p->getKey(), cache(Authorization::cacheKey())->first()->getKey());
+
+        // Detach the permission from the role.
+        $r->permissions()->detach($p);
+
+        // User no longer has permission.
+        $this->assertFalse($u->hasPermission($p));
+        $this->assertFalse($u->hasPermission('create'));
+    }
+
+    public function test_permissions_are_not_cached_when_disabled()
+    {
+        Authorization::disablePermissionCache();
+
+        $p = $this->createPermission(['name' => 'create', 'label' => 'Create']);
+
+        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+        $this->assertNull(cache(Authorization::cacheKey()));
     }
 }
