@@ -105,10 +105,11 @@ class Role extends Model
 ```php
 use Larapacks\Authorization\Traits\HasUsers;
 use Larapacks\Authorization\Traits\HasRoles;
+use Larapacks\Authorization\Traits\ClearsCachedPermissions;
 
 class Permission extends Model
 {
-    use HasUsers, HasRoles;
+    use HasUsers, HasRoles , ClearsCachedPermissions;
 ```
 
 ## Usage

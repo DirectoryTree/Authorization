@@ -2,7 +2,6 @@
 
 namespace Larapacks\Authorization;
 
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthorizationServiceProvider extends ServiceProvider
@@ -10,9 +9,9 @@ class AuthorizationServiceProvider extends ServiceProvider
     /**
      * Register authorization permissions.
      *
-     * @param Gate $gate
+     * @return void
      */
-    public function boot(Gate $gate)
+    public function boot()
     {
         if ($this->app->runningInConsole()) {
             $this->registerMigrations();
@@ -24,7 +23,7 @@ class AuthorizationServiceProvider extends ServiceProvider
 
         // Register the permissions.
         if (Authorization::$registersInGate) {
-            (new PermissionRegistrar($gate))->register();
+            app(PermissionRegistrar::class)->register();
         }
     }
 

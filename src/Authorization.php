@@ -2,6 +2,8 @@
 
 namespace Larapacks\Authorization;
 
+use DateTimeInterface;
+
 class Authorization
 {
     /**
@@ -17,6 +19,27 @@ class Authorization
      * @var bool
      */
     public static $registersInGate = true;
+
+    /**
+     * The date when the permission cache expires.
+     *
+     * @var DateTimeInterface|null
+     */
+    public static $cacheExpiresAt;
+
+    /**
+     * Indicates if Authorization will cache permissions.
+     *
+     * @var bool
+     */
+    public static $cachesPermissions = true;
+
+    /**
+     * The cache key.
+     *
+     * @var string
+     */
+    public static $cacheKey = 'authorization.permissions';
 
     /**
      * The user model class name.
@@ -38,6 +61,42 @@ class Authorization
      * @var string
      */
     public static $permissionModel = 'Larapacks\Authorization\Permission';
+
+    /**
+     * Get or set when the permission cache expires.
+     *
+     * @param DateTimeInterface|null $date
+     *
+     * @return DateTimeInterface|static
+     */
+    public static function cacheExpiresIn(DateTimeInterface $date = null)
+    {
+        if (is_null($date)) {
+            return static::$cacheExpiresAt ?? now()->addMinutes(60);
+        }
+
+        static::$cacheExpiresAt = $date;
+
+        return new static;
+    }
+
+    /**
+     * Get or set the cache key.
+     *
+     * @param string|null $cacheKey
+     *
+     * @return static|string
+     */
+    public static function cacheKey($cacheKey = null)
+    {
+        if(is_null($cacheKey)) {
+            return static::$cacheKey;
+        }
+
+        static::$cacheKey = $cacheKey;
+
+        return new static;
+    }
 
     /**
      * Set the user model class name.
@@ -132,7 +191,7 @@ class Authorization
     /**
      * Configure Authorization to not register its migrations.
      *
-     * @return Authorization
+     * @return static
      */
     public static function ignoreMigrations()
     {

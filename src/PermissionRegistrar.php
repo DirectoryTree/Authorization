@@ -3,6 +3,7 @@
 namespace Larapacks\Authorization;
 
 use PDOException;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 
 class PermissionRegistrar
@@ -15,13 +16,22 @@ class PermissionRegistrar
     protected $gate;
 
     /**
+     * The cache manager.
+     *
+     * @var CacheManager
+     */
+    protected $cache;
+
+    /**
      * PermissionRegistrar constructor.
      *
-     * @param Gate $gate
+     * @param Gate         $gate
+     * @param CacheManager $manager
      */
-    public function __construct(Gate $gate)
+    public function __construct(Gate $gate, CacheManager $manager)
     {
         $this->gate = $gate;
+        $this->cache = $manager;
     }
 
     /**
@@ -40,6 +50,16 @@ class PermissionRegistrar
     }
 
     /**
+     * Flushes the permission cache.
+     *
+     * @return void
+     */
+    public function flushCache()
+    {
+        $this->cache->forget(Authorization::cacheKey());
+    }
+
+    /**
      * Fetch the collection of site permissions.
      *
      * @return \Illuminate\Database\Eloquent\Collection|array
@@ -47,7 +67,9 @@ class PermissionRegistrar
     protected function getPermissions()
     {
         try {
-            return Authorization::permission()->get();
+            return $this->cache->remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
+                Authorization::permission()->get();
+            });
         } catch (PDOException $e) {
             // We catch PDOExceptions here in case the developer
             // hasn't migrated authorization tables yet.
