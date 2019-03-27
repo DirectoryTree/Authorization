@@ -4,6 +4,7 @@ namespace Larapacks\Authorization\Tests;
 
 use Illuminate\Support\Collection;
 use Larapacks\Authorization\Authorization;
+use Larapacks\Authorization\PermissionRegistrar;
 use Larapacks\Authorization\Tests\Stubs\User;
 
 class AuthorizationTest extends TestCase
@@ -634,5 +635,24 @@ class AuthorizationTest extends TestCase
 
         $this->assertInstanceOf(Authorization::permissionModel(), $admin->revoke($editUser));
         $this->assertInstanceOf(Authorization::permissionModel(), $admin->revoke($editUser));
+    }
+
+    public function test_permissions_are_cached_in_registrar()
+    {
+        $permissions = collect([
+            $this->createPermission([
+                'name'  => 'create',
+                'label' => 'Create',
+            ]),
+            $this->createPermission([
+                'name'  => 'edit',
+                'label' => 'Edit',
+            ])
+        ]);
+
+        $keys = $permissions->map->id;
+
+        $this->assertEquals($keys, app(PermissionRegistrar::class)->getPermissions()->map->id);
+        $this->assertEquals($keys, cache(Authorization::cacheKey())->map->id);
     }
 }
