@@ -15,16 +15,16 @@ class CreateAuthorizationTables extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
+            $table->timestamps();
             $table->string('name');
             $table->string('label')->nullable();
-            $table->timestamps();
         });
 
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
+            $table->timestamps();
             $table->string('name');
             $table->string('label')->nullable();
-            $table->timestamps();
         });
 
         Schema::create('permission_role', function (Blueprint $table) {
