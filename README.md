@@ -256,6 +256,28 @@ if (auth()->user()->hasAnyRoles(['administrator', 'member', 'guest'])) {
 }
 ```
 
+### Caching
+
+By default all permissions are cached to prevent them from being retrieved on every user request.
+
+If you would like to disable this cache call `Authorization::disablePermissionCache` in your `AuthServiceProvider`:
+
+```php
+use Larapacks\Authorization\Authorization;
+
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this->registerPolicies();
+
+    Authorization::disablePermissionCache();
+}
+```
+
 ### Middleware
 
 Authorization includes two useful middleware classes you can utilize for your routes.
@@ -331,3 +353,24 @@ public function setUp()
     app(PermissionResistrar::class)->register();
 }
 ```
+
+## Upgrading v1 to v2
+
+### Configuration
+
+Configuration is now done via static methods on the `Authorization` class.
+
+You may delete the published `config/authorization.php` file.
+
+### Traits
+
+The `UserRolesTrait` has been renamed to `Authorizable`.
+
+The `PermissionRolesTrait` has been separated into multiple traits.
+You must apply the `HasRoles`, `HasUsers`, and `ClearsCachedPermissions` traits.
+
+The `RolePermissionsTrait` has been renamed to `ManagesPermissions`.
+
+### Closure Permissions
+
+Permission closures have been removed. If you still require this functionality, continue using v1.
