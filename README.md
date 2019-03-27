@@ -260,7 +260,7 @@ if (auth()->user()->hasAnyRoles(['administrator', 'member', 'guest'])) {
 
 By default all permissions are cached to prevent them from being retrieved on every user request.
 
-If you would like to disable this cache call `Authorization::disablePermissionCache` in your `AuthServiceProvider`:
+If you would like to disable the cache, call `Authorization::disablePermissionCache` in your `AuthServiceProvider`:
 
 ```php
 use Larapacks\Authorization\Authorization;
@@ -275,6 +275,72 @@ public function boot()
     $this->registerPolicies();
 
     Authorization::disablePermissionCache();
+}
+```
+
+#### Cache Key
+
+By default, the permission cache key is `authorization.permissions`.
+
+To alter the cache key, call `Authorization::cacheKey` in your `AuthServiceProvider`:
+
+```php
+use Larapacks\Authorization\Authorization;
+
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this->registerPolicies();
+
+    Authorization::cacheKey('my-key');
+}
+```
+
+#### Cache Expiry
+
+By default, the permission cache will expire daily.
+
+To alter this expiry date, call `Authorization::cacheExpiresIn` in your `AuthServiceProvider`:
+
+```php
+use Larapacks\Authorization\Authorization;
+
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this->registerPolicies();
+
+    Authorization::cacheExpiresIn(now()->addWeek());
+}
+```
+
+### Gate Registration
+
+By default all permissions you create are registered in Laravel's Gate.
+
+If you would like to disable this, call `Authorization::disableGateRegistration` in your `AuthServiceProvider`:
+
+```php
+use Larapacks\Authorization\Authorization;
+
+/**
+ * Register any authentication / authorization services.
+ *
+ * @return void
+ */
+public function boot()
+{
+    $this->registerPolicies();
+
+    Authorization::disableGateRegistration();
 }
 ```
 
