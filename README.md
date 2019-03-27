@@ -416,7 +416,7 @@ use Larapacks\Authorization\PermissionRegistrar;
 ```
 
 ```php
-public function setUp()
+protected function setUp()
 {
     parent::setUp();
     
