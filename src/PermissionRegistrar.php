@@ -71,8 +71,7 @@ class PermissionRegistrar
                 return Authorization::permission()->get();
             });
         } catch (PDOException $e) {
-            // We catch PDOExceptions here in case the developer
-            // hasn't migrated authorization tables yet.
+            // Migrations haven't been ran yet.
         }
 
         return [];
