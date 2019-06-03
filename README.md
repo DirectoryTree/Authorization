@@ -31,13 +31,11 @@ Now insert the `Larapacks\Authorization\Traits\Authorizable` onto your `App\User
 namespace App;
 
 use Larapacks\Authorization\Traits\Authorizable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable, Authorizable;
-}
+    use Authorizable;
 ```
 
 You can now perform user authorization.
