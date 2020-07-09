@@ -109,7 +109,7 @@ use Larapacks\Authorization\Traits\ClearsCachedPermissions;
 
 class Permission extends Model
 {
-    use HasUsers, HasRoles , ClearsCachedPermissions;
+    use HasUsers, HasRoles, ClearsCachedPermissions;
 ```
 
 ## Usage
@@ -190,7 +190,7 @@ if (Gate::allows('users.create')) {
 @endcan
 ```
 
-### Checking Permissions & Roles (Authorization Specific)
+### Checking Permissions & Roles (Using Authorization Package Methods)
 
 Checking for permission:
 
@@ -365,8 +365,12 @@ protected $routeMiddleware = [
     'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
     'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-    'permission' => \Larapacks\Authorization\Middleware\PermissionMiddleware::class, // The permission middleware
-    'role' => \Larapacks\Authorization\Middleware\RoleMiddleware::class, // The role middleware
+    
+    // The role middleware:
+    'role' => \Larapacks\Authorization\Middleware\RoleMiddleware::class,
+    
+    // The permission middleware:
+    'permission' => \Larapacks\Authorization\Middleware\PermissionMiddleware::class,
 ];
 ```
 
@@ -385,7 +389,8 @@ Route::get('users', [
 // Multiple permissions:
 Route::get('users', [
     'uses' => 'UsersController@index',
-    'middleware' => 'permission:users.index,users.create', // Users must have index **and** create rights to access this route.
+    // Users must have index **and** create rights to access this route.
+    'middleware' => 'permission:users.index,users.create',
 ]);
 ```
 
@@ -400,14 +405,16 @@ Route::get('users', [
 // Multiple roles:
 Route::get('users', [
     'uses' => 'UsersController@index',
-    'middleware' => 'role:administrator,member', // Users must be an administrator **and** a member to access this route.
+    // Users must be an administrator **and** a member to access this route.
+    'middleware' => 'role:administrator,member',
 ]);
 ```
 
 ### Running Tests
 
-To run your applications tests, inside your `TestCase::setUp()` method, you'll instantiate
-the `PermissionRegistrar` before running your tests for permissions to register properly:
+To run your applications tests, **you must** instantiate the `PermissionRegistrar`
+inside your `TestCase::setUp()` method **before** running your
+tests for permissions to register properly:
 
 ```php
 use Larapacks\Authorization\PermissionRegistrar;
