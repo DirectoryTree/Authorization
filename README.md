@@ -161,30 +161,36 @@ $user->permissions()->save($createUsers);
 
 ### Checking Permissions & Roles
 
-```php
-// Using Laravel's native `can()` method:
+Using Laravel's native `$user->can()` method:
 
+```php
 if ($user->can('users.create')) {
     // This user can create other users.
 }
+```
 
-// Using Laravel's native `authorize()` method in your controllers:
+Using Laravel's native `authorize()` method in your controllers:
 
+```php
 public function create()
 {
     $this->authorize('users.create');
     
     User::create(['...']);
 }
+```
 
-// Using Laravel's native Gate facade:
+Using Laravel's native `Gate` facade:
 
+```php
 if (Gate::allows('users.create')) {
     //
 }
+```
 
-// Using Laravel's native `@can` directive in your views:
+Using Laravel's native `@can` directive in your views:
 
+```blade
 @can('users.create')
     <!-- This user can create other users. -->
 @endcan
