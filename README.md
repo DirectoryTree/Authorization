@@ -8,6 +8,18 @@
 
 An easy, native role / permission management system for Laravel.
 
+## Index
+
+- [Installation](#installation)
+  - [Migration Customization](#migration-customization)
+  - [Model Customization](#model-customization)
+- [Usage](#usage)
+- [Checking Permissions & Roles](#checking-permissions--roles)
+- [Caching](#caching)
+- [Gate Registration](#gate-registration)
+- [Middleware](#middleware)
+- [Testing](#running-tests)
+
 ## Installation
 
 >**Note**: Laravel 5.5 or greater is required.
