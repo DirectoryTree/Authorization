@@ -52,11 +52,11 @@ trait Authorizable
     public function hasRole($role)
     {
         if (is_string($role)) {
-            $role = $this->roles()->whereName($role)->first();
+            return $this->roles->contains('name', $role);
         }
 
         if ($role instanceof Model) {
-            return $this->roles()->find($role->getKey()) instanceof Model;
+            return $this->roles->find($role->getKey()) instanceof Model;
         }
 
         return false;
@@ -75,6 +75,8 @@ trait Authorizable
             $roles = collect($roles);
         }
 
+        $this->load('roles');
+
         return $roles->filter(function ($role) {
             return $this->hasRole($role);
         })->count() === $roles->count();
@@ -92,6 +94,8 @@ trait Authorizable
         if (! $roles instanceof Collection) {
             $roles = collect($roles);
         }
+
+        $this->load('roles');
 
         return $roles->filter(function ($role) {
             return $this->hasRole($role);
