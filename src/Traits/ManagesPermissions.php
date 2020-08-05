@@ -18,6 +18,12 @@ trait ManagesPermissions
      */
     public function hasPermission($permission)
     {
+        if (empty($permission)) {
+            return false;
+        }
+
+        $this->load('permissions');
+
         return $permission instanceof Model
             ? $this->permissions->contains($permission)
             : $this->permissions->contains('name', $permission);

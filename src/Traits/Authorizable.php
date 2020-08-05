@@ -54,8 +54,10 @@ trait Authorizable
             return false;
         }
 
+        $this->load('roles');
+
         return $role instanceof Model
-            ? $this->roles->find($role->getKey()) instanceof Model
+            ? $this->roles->contains($role)
             : $this->roles->contains('name', $role);
     }
 
@@ -68,8 +70,6 @@ trait Authorizable
      */
     public function hasRoles($roles)
     {
-        $this->load('roles');
-
         $roles = collect($roles);
 
         return $roles->filter(function ($role) {
@@ -86,8 +86,6 @@ trait Authorizable
      */
     public function hasAnyRoles($roles)
     {
-        $this->load('roles');
-
         return collect($roles)->filter(function ($role) {
             return $this->hasRole($role);
         })->count() > 0;
