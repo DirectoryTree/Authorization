@@ -3,6 +3,7 @@
 namespace Larapacks\Authorization\Traits;
 
 use Larapacks\Authorization\Authorization;
+use Larapacks\Authorization\PermissionPivot;
 
 trait HasPermissions
 {
@@ -13,6 +14,6 @@ trait HasPermissions
      */
     public function permissions()
     {
-        return $this->belongsToMany(Authorization::permissionModel());
+        return $this->belongsToMany(Authorization::permissionModel())->using(PermissionPivot::class);
     }
 }

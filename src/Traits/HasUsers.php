@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Larapacks\Authorization\UserPivot;
 use Larapacks\Authorization\Authorization;
 
 trait HasUsers
@@ -13,6 +14,6 @@ trait HasUsers
      */
     public function users()
     {
-        return $this->belongsToMany(Authorization::userModel());
+        return $this->belongsToMany(Authorization::userModel())->using(UserPivot::class);
     }
 }

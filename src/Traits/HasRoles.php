@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Larapacks\Authorization\RolePivot;
 use Larapacks\Authorization\Authorization;
 
 trait HasRoles
@@ -13,6 +14,6 @@ trait HasRoles
      */
     public function roles()
     {
-        return $this->belongsToMany(Authorization::roleModel());
+        return $this->belongsToMany(Authorization::roleModel())->using(RolePivot::class);
     }
 }

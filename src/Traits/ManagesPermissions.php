@@ -2,6 +2,7 @@
 
 namespace Larapacks\Authorization\Traits;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,15 +19,9 @@ trait ManagesPermissions
      */
     public function hasPermission($permission)
     {
-        if (is_string($permission)) {
-            $permission = $this->permissions()->whereName($permission)->first();
-        }
-
-        if ($permission instanceof Model) {
-            return $this->permissions()->get()->contains($permission);
-        }
-
-        return false;
+        return $permission instanceof Model
+            ? $this->permissions->contains($permission)
+            : $this->permissions->contains('name', $permission);
     }
 
     /**
@@ -38,11 +33,7 @@ trait ManagesPermissions
      */
     public function hasPermissions($permissions)
     {
-        if (! is_array($permissions)) {
-            $permissions = [$permissions];
-        }
-
-        return collect($permissions)->filter(function ($permission) {
+        return collect(Arr::wrap($permissions))->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->count() === count($permissions);
     }
@@ -56,11 +47,7 @@ trait ManagesPermissions
      */
     public function hasAnyPermissions($permissions)
     {
-        if (! is_array($permissions)) {
-            $permissions = [$permissions];
-        }
-
-        return collect($permissions)->filter(function ($permission) {
+        return collect(Arr::wrap($permissions))->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->count() > 0;
     }
@@ -77,21 +64,17 @@ trait ManagesPermissions
     public function grant($permissions)
     {
         if ($permissions instanceof Model) {
-            if ($this->hasPermission($permissions)) {
-                return $permissions;
-            }
-
-            return $this->permissions()->save($permissions);
+            return $this->hasPermission($permissions)
+                ? $permissions
+                : $this->permissions()->save($permissions);
         } elseif (is_array($permissions)) {
             $permissions = collect($permissions);
         }
 
         return $permissions->filter(function ($permission) {
-            if ($permission instanceof Model) {
-                return $this->grant($permission);
-            }
-
-            return false;
+            return $permission instanceof Model
+                ? $this->grant($permission)
+                : false;
         });
     }
 
@@ -119,11 +102,9 @@ trait ManagesPermissions
         }
 
         return $permissions->filter(function ($permission) {
-            if ($permission instanceof Model) {
-                return $this->revoke($permission);
-            }
-
-            return false;
+            return $permission instanceof Model
+                ? $this->revoke($permission)
+                : false;
         });
     }
 
