@@ -3,7 +3,6 @@
 namespace Larapacks\Authorization\Traits;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 trait ManagesPermissions
@@ -59,7 +58,7 @@ trait ManagesPermissions
      *
      * @param Model|array $permissions
      *
-     * @return Model|Collection
+     * @return Model|\Illuminate\Support\Collection
      */
     public function grant($permissions)
     {
@@ -85,7 +84,7 @@ trait ManagesPermissions
      *
      * @param Model|array $permissions
      *
-     * @return Model|Collection
+     * @return Model|\Illuminate\Support\Collection
      */
     public function revoke($permissions)
     {

@@ -2,7 +2,6 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Authorization;
 
@@ -51,19 +50,17 @@ trait Authorizable
      */
     public function hasRole($role)
     {
-        if (is_string($role)) {
-            return $this->roles->contains('name', $role);
+        if (empty($role)) {
+            return false;
         }
 
-        if ($role instanceof Model) {
-            return $this->roles->find($role->getKey()) instanceof Model;
-        }
-
-        return false;
+        return $role instanceof Model
+            ? $this->roles->find($role->getKey()) instanceof Model
+            : $this->roles->contains('name', $role);
     }
 
     /**
-     * Returns true / false if the current user has the specified roles.
+     * Determine if the user has all of the given roles.
      *
      * @param array $roles
      *
@@ -71,11 +68,9 @@ trait Authorizable
      */
     public function hasRoles($roles)
     {
-        if (! $roles instanceof Collection) {
-            $roles = collect($roles);
-        }
-
         $this->load('roles');
+
+        $roles = collect($roles);
 
         return $roles->filter(function ($role) {
             return $this->hasRole($role);
@@ -83,7 +78,7 @@ trait Authorizable
     }
 
     /**
-     * Returns true / false if the current user has any of the specified roles.
+     * Determine if the user has any of the given roles.
      *
      * @param array $roles
      *
@@ -91,19 +86,15 @@ trait Authorizable
      */
     public function hasAnyRoles($roles)
     {
-        if (! $roles instanceof Collection) {
-            $roles = collect($roles);
-        }
-
         $this->load('roles');
 
-        return $roles->filter(function ($role) {
+        return collect($roles)->filter(function ($role) {
             return $this->hasRole($role);
         })->count() > 0;
     }
 
     /**
-     * Determine if the user may perform the given permission.
+     * Determine if the user has the given permission.
      *
      * @param string|Model $permission
      *
@@ -139,18 +130,15 @@ trait Authorizable
     }
 
     /**
-     * Returns true / false if the current user
-     * has the specified permissions.
+     * Determine if the user has all of the given permissions.
      *
-     * @param array|Collection $permissions
+     * @param array|\Illuminate\Support\Collection $permissions
      *
      * @return bool
      */
     public function hasPermissions($permissions)
     {
-        if (! $permissions instanceof Collection) {
-            $permissions = collect($permissions);
-        }
+        $permissions = collect($permissions);
 
         return $permissions->filter(function ($permission) {
             return $this->hasPermission($permission);
@@ -158,18 +146,15 @@ trait Authorizable
     }
 
     /**
-     * Returns true / false if the current user has
-     * any of the specified permissions.
+     * Determine if the user has any of the permissions.
      *
-     * @param array|Collection $permissions
+     * @param array|\Illuminate\Support\Collection $permissions
      *
      * @return bool
      */
     public function hasAnyPermissions($permissions)
     {
-        if (! $permissions instanceof Collection) {
-            $permissions = collect($permissions);
-        }
+        $permissions = collect($permissions);
 
         return $permissions->filter(function ($permission) {
             return $this->hasPermission($permission);
@@ -177,7 +162,7 @@ trait Authorizable
     }
 
     /**
-     * Returns true / false if the user does not have the specified permission.
+     * Determine if the user does not have the given permission.
      *
      * @param string|Model $permission
      *
@@ -189,10 +174,9 @@ trait Authorizable
     }
 
     /**
-     * Returns true / false if all of the specified
-     * permissions do not exist on the current user.
+     * Determine if the user does not have all of the given permissions
      *
-     * @param array|Collection $permissions
+     * @param array|\Illuminate\Support\Collection $permissions
      *
      * @return bool
      */
@@ -202,10 +186,9 @@ trait Authorizable
     }
 
     /**
-     * Returns true / false if any of the specified
-     * permissions do not exist on the current user.
+     * Determine if the user does not have any of the given permissions.
      *
-     * @param array|Collection $permissions
+     * @param array|\Illuminate\Support\Collection $permissions
      *
      * @return bool
      */
