@@ -72,11 +72,9 @@ trait ManagesPermissions
             return $this->hasPermission($permissions)
                 ? $permissions
                 : $this->permissions()->save($permissions);
-        } elseif (is_array($permissions)) {
-            $permissions = collect($permissions);
         }
 
-        return $permissions->filter(function ($permission) {
+        return collect($permissions)->filter(function ($permission) {
             return $permission instanceof Model
                 ? $this->grant($permission)
                 : false;
@@ -99,14 +97,12 @@ trait ManagesPermissions
                 return $permissions;
             }
 
-            if ($this->permissions()->detach($permissions) === 1) {
-                return $permissions;
-            }
-        } elseif (is_array($permissions)) {
-            $permissions = collect($permissions);
+            $this->permissions()->detach($permissions);
+
+            return $permissions;
         }
 
-        return $permissions->filter(function ($permission) {
+        return collect($permissions)->filter(function ($permission) {
             return $permission instanceof Model
                 ? $this->revoke($permission)
                 : false;

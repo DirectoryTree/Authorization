@@ -88,7 +88,7 @@ trait Authorizable
     {
         return collect($roles)->filter(function ($role) {
             return $this->hasRole($role);
-        })->count() > 0;
+        })->isNotEmpty();
     }
 
     /**
@@ -152,11 +152,9 @@ trait Authorizable
      */
     public function hasAnyPermissions($permissions)
     {
-        $permissions = collect($permissions);
-
-        return $permissions->filter(function ($permission) {
+        return collect($permissions)->filter(function ($permission) {
             return $this->hasPermission($permission);
-        })->count() > 0;
+        })->isNotEmpty();
     }
 
     /**
