@@ -138,14 +138,19 @@ class AuthorizationTest extends TestCase
             'label' => 'Admin',
         ]);
 
-        $user->assignRole($admin);
-
         $createUsers = $this->createPermission([
             'name'  => 'users.create',
             'label' => 'Create Users',
         ]);
 
-        $this->assertInstanceOf(Authorization::permissionModel(), $admin->grant($createUsers));
+        $this->assertFalse($user->hasRole($admin));
+        $this->assertFalse($user->hasPermission($createUsers));
+
+        $user->assignRole($admin);
+
+        $this->assertTrue($user->hasRole($admin));
+        $this->assertSame($createUsers, $admin->grant($createUsers));
+        $this->assertTrue($user->hasPermission($createUsers));
         $this->assertTrue($user->hasPermission($createUsers));
     }
 
@@ -226,7 +231,14 @@ class AuthorizationTest extends TestCase
 
         $admin->grant($createUsers);
 
-        $this->assertInstanceOf(Authorization::permissionModel(), $admin->revoke($createUsers));
+        $this->assertTrue($admin->hasPermission($createUsers));
+        $this->assertTrue($user->hasPermission($createUsers));
+
+        $revoked = $admin->revoke($createUsers);
+
+        $this->assertSame($createUsers, $revoked);
+        $this->assertFalse($admin->hasPermission($createUsers));
+        $this->assertFalse($user->hasPermission($createUsers));
     }
 
     public function test_revoke_multiple_permissions()
@@ -254,7 +266,20 @@ class AuthorizationTest extends TestCase
 
         $admin->grant([$createUsers, $editUsers]);
 
-        $this->assertEquals(2, $admin->revoke([$createUsers, $editUsers])->count());
+        $this->assertTrue($admin->hasPermission($editUsers));
+        $this->assertTrue($admin->hasPermission($createUsers));
+
+        $this->assertTrue($user->hasPermission($editUsers));
+        $this->assertTrue($user->hasPermission($createUsers));
+
+        $revoked = $admin->revoke([$createUsers, $editUsers]);
+
+        $this->assertCount(2, $revoked);
+        $this->assertFalse($admin->hasPermission($editUsers));
+        $this->assertFalse($admin->hasPermission($createUsers));
+
+        $this->assertFalse($user->hasPermission($editUsers));
+        $this->assertFalse($user->hasPermission($createUsers));
     }
 
     public function test_revoke_multiple_permissions_with_non_existent_permission()
