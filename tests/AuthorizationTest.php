@@ -5,50 +5,9 @@ namespace Larapacks\Authorization\Tests;
 use Illuminate\Support\Collection;
 use Larapacks\Authorization\Authorization;
 use Larapacks\Authorization\PermissionRegistrar;
-use Larapacks\Authorization\Tests\Stubs\User;
 
 class AuthorizationTest extends TestCase
 {
-    /**
-     * Returns a new stub user instance.
-     *
-     * @param array $attributes
-     *
-     * @return User
-     */
-    protected function createUser($attributes = [])
-    {
-        return User::create($attributes);
-    }
-
-    /**
-     * Returns a new role instance.
-     *
-     * @param array $attributes
-     *
-     * @return \Larapacks\Authorization\Role
-     */
-    protected function createRole($attributes = [])
-    {
-        $role = Authorization::role();
-
-        return $role::create($attributes);
-    }
-
-    /**
-     * Returns a new permission instance.
-     *
-     * @param array $attributes
-     *
-     * @return \Larapacks\Authorization\Permission
-     */
-    protected function createPermission($attributes = [])
-    {
-        $permission = Authorization::permission();
-
-        return $permission::create($attributes);
-    }
-
     public function test_assign_role()
     {
         $this->createRole([
@@ -103,6 +62,8 @@ class AuthorizationTest extends TestCase
             'name' => 'John Doe',
         ]);
 
+        $this->assertEmpty($user->roles);
+
         $user->assignRole($admin);
         $user->assignRole($member);
 
@@ -119,6 +80,9 @@ class AuthorizationTest extends TestCase
         $user = $this->createUser([
             'name' => 'John Doe',
         ]);
+
+        $this->assertFalse($user->hasRole($admin));
+        $this->assertFalse($user->hasRole('administrator'));
 
         $user->assignRole($admin);
 
@@ -149,9 +113,11 @@ class AuthorizationTest extends TestCase
         $user->assignRole($admin);
 
         $this->assertTrue($user->hasRole($admin));
+
         $this->assertSame($createUsers, $admin->grant($createUsers));
+
         $this->assertTrue($user->hasPermission($createUsers));
-        $this->assertTrue($user->hasPermission($createUsers));
+        $this->assertTrue($admin->hasPermission($createUsers));
     }
 
     public function test_grant_multiple_permissions()
@@ -165,7 +131,13 @@ class AuthorizationTest extends TestCase
             'label' => 'Admin',
         ]);
 
+        $this->assertFalse($user->hasRole($admin));
+        $this->assertFalse($user->hasRole('administrator'));
+
         $user->assignRole($admin);
+
+        $this->assertTrue($user->hasRole($admin));
+        $this->assertTrue($user->hasRole('administrator'));
 
         $createUsers = $this->createPermission([
             'name'  => 'users.create',
@@ -181,8 +153,12 @@ class AuthorizationTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $granted);
         $this->assertCount(2, $granted);
+
         $this->assertTrue($user->hasPermission($createUsers));
         $this->assertTrue($user->hasPermission($editUsers));
+
+        $this->assertTrue($admin->hasPermission($createUsers));
+        $this->assertTrue($admin->hasPermission($editUsers));
     }
 
     public function test_grant_multiple_permissions_with_non_existent_permission()
@@ -208,7 +184,7 @@ class AuthorizationTest extends TestCase
             'label' => 'Edit Users',
         ]);
 
-        $this->assertEquals(2, $admin->grant([$createUsers, $editUsers, 'testing'])->count());
+        $this->assertEquals(2, $admin->grant([$createUsers, $editUsers, 'invalid'])->count());
     }
 
     public function test_revoke_permission()
@@ -234,9 +210,8 @@ class AuthorizationTest extends TestCase
         $this->assertTrue($admin->hasPermission($createUsers));
         $this->assertTrue($user->hasPermission($createUsers));
 
-        $revoked = $admin->revoke($createUsers);
+        $this->assertSame($createUsers, $admin->revoke($createUsers));
 
-        $this->assertSame($createUsers, $revoked);
         $this->assertFalse($admin->hasPermission($createUsers));
         $this->assertFalse($user->hasPermission($createUsers));
     }
@@ -272,9 +247,8 @@ class AuthorizationTest extends TestCase
         $this->assertTrue($user->hasPermission($editUsers));
         $this->assertTrue($user->hasPermission($createUsers));
 
-        $revoked = $admin->revoke([$createUsers, $editUsers]);
+        $this->assertCount(2, $admin->revoke([$createUsers, $editUsers]));
 
-        $this->assertCount(2, $revoked);
         $this->assertFalse($admin->hasPermission($editUsers));
         $this->assertFalse($admin->hasPermission($createUsers));
 
@@ -307,7 +281,7 @@ class AuthorizationTest extends TestCase
 
         $admin->grant([$createUsers, $editUsers]);
 
-        $this->assertEquals(2, $admin->revoke([$createUsers, $editUsers, 'testing'])->count());
+        $this->assertEquals(2, $admin->revoke([$createUsers, $editUsers, 'invalid'])->count());
     }
 
     public function test_has_permission()
@@ -743,40 +717,40 @@ class AuthorizationTest extends TestCase
 
     public function test_user_does_not_have_permission_with_cached_permissions()
     {
-        $u = $this->createUser(['name' => 'John Doe']);
+        $user = $this->createUser(['name' => 'John Doe']);
 
-        $p = $this->createPermission(['name' => 'create', 'label' => 'Create']);
+        $permission = $this->createPermission(['name' => 'create', 'label' => 'Create']);
 
-        $r = $this->createRole(['name' => 'admin', 'label' => 'Administrator']);
+        $role = $this->createRole(['name' => 'admin', 'label' => 'Administrator']);
 
         // Attach the permission to the role.
-        $r->permissions()->attach($p);
+        $role->permissions()->attach($permission);
 
         // Attach the role to the user.
-        $u->roles()->attach($r);
+        $user->roles()->attach($role);
 
         // User has permission.
-        $this->assertTrue($u->hasPermission($p));
-        $this->assertTrue($u->hasPermission('create'));
+        $this->assertTrue($user->hasPermission($permission));
+        $this->assertTrue($user->hasPermission('create'));
 
-        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
-        $this->assertEquals($p->getKey(), cache(Authorization::cacheKey())->first()->getKey());
+        $this->assertEquals($permission->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+        $this->assertEquals($permission->getKey(), cache(Authorization::cacheKey())->first()->getKey());
 
         // Detach the permission from the role.
-        $r->permissions()->detach($p);
+        $role->permissions()->detach($permission);
 
         // User no longer has permission.
-        $this->assertFalse($u->hasPermission($p));
-        $this->assertFalse($u->hasPermission('create'));
+        $this->assertFalse($user->hasPermission($permission));
+        $this->assertFalse($user->hasPermission('create'));
     }
 
     public function test_permissions_are_not_cached_when_disabled()
     {
         Authorization::disablePermissionCache();
 
-        $p = $this->createPermission(['name' => 'create', 'label' => 'Create']);
+        $permission = $this->createPermission(['name' => 'create', 'label' => 'Create']);
 
-        $this->assertEquals($p->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
+        $this->assertEquals($permission->getKey(), app(PermissionRegistrar::class)->getPermissions()->first()->getKey());
         $this->assertNull(cache(Authorization::cacheKey()));
     }
 }
