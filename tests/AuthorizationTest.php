@@ -300,6 +300,8 @@ class AuthorizationTest extends TestCase
             'name' => 'John Doe',
         ]);
 
+        $this->assertFalse($user->hasPermission(null));
+
         $user->assignRole($admin);
 
         $admin->grant($permission);
@@ -331,6 +333,11 @@ class AuthorizationTest extends TestCase
         $user = $this->createUser([
             'name' => 'John Doe',
         ]);
+
+        $this->assertFalse($user->hasPermission(null));
+        $this->assertFalse($user->hasPermissions([]));
+        $this->assertFalse($user->hasPermissions([null]));
+        $this->assertFalse($user->hasPermissions(collect()));
 
         $user->assignRole($admin);
 
@@ -518,6 +525,9 @@ class AuthorizationTest extends TestCase
             'name' => 'John Doe',
         ]);
 
+        $this->assertFalse($user->hasRole(null));
+        $this->assertFalse($user->hasRole(''));
+
         $user->assignRole($admin);
 
         $this->assertTrue($user->hasRole('administrator'));
@@ -546,6 +556,11 @@ class AuthorizationTest extends TestCase
         $user = $this->createUser([
             'name' => 'John Doe',
         ]);
+
+        $this->assertFalse($user->hasRoles(null));
+        $this->assertFalse($user->hasRoles([]));
+        $this->assertFalse($user->hasRoles([null]));
+        $this->assertFalse($user->hasRoles(collect()));
 
         $user->assignRole($admin);
         $user->assignRole($member);

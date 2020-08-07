@@ -72,6 +72,10 @@ trait Authorizable
     {
         $roles = collect($roles);
 
+        if ($roles->isEmpty()) {
+            return false;
+        }
+
         return $roles->filter(function ($role) {
             return $this->hasRole($role);
         })->count() === $roles->count();
@@ -137,6 +141,10 @@ trait Authorizable
     public function hasPermissions($permissions)
     {
         $permissions = collect($permissions);
+
+        if ($permissions->isEmpty()) {
+            return false;
+        }
 
         return $permissions->filter(function ($permission) {
             return $this->hasPermission($permission);
