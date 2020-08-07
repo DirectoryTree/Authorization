@@ -54,7 +54,7 @@ trait Authorizable
             return false;
         }
 
-        $this->load('roles');
+        $this->loadMissing('roles');
 
         return $role instanceof Model
             ? $this->roles->contains($role)

@@ -22,7 +22,7 @@ trait ManagesPermissions
             return false;
         }
 
-        $this->load('permissions');
+        $this->loadMissing('permissions');
 
         return $permission instanceof Model
             ? $this->permissions->contains($permission)
