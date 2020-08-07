@@ -62,7 +62,7 @@ trait ManagesPermissions
      *
      * Returns the granted permission(s).
      *
-     * @param Model|array $permissions
+     * @param Model|Model[] $permissions
      *
      * @return Model|\Illuminate\Support\Collection
      */
@@ -86,7 +86,7 @@ trait ManagesPermissions
      *
      * Returns a collection of revoked permissions.
      *
-     * @param Model|array $permissions
+     * @param Model|Model[] $permissions
      *
      * @return Model|\Illuminate\Support\Collection
      */
