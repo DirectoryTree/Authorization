@@ -2,34 +2,18 @@
 
 namespace Larapacks\Authorization\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-
-class PermissionMiddleware
+class PermissionMiddleware extends AuthorizationMiddleware
 {
     /**
-     * Run the request filter.
+     * Determine if the user has the required permission to access the route.
      *
-     * @param Request $request
-     * @param Closure $next
-     * @param array   $permissions
+     * @param \App\User  $user
+     * @param array|null $permissions
      *
-     * @return mixed
+     * @return bool
      */
-    public function handle(Request $request, Closure $next, $permissions = null)
+    protected function authorize($user, $permissions = null)
     {
-        $args = func_get_args();
-
-        if ($args > 3) {
-            // If we've been given more than one permission, we
-            // need to retrieve all of them from the method.
-            $permissions = array_slice($args, 2);
-        }
-
-        if (! $request->user()->hasPermissions($permissions)) {
-            abort(403, 'Unauthorized.');
-        }
-
-        return $next($request);
+        return $user->hasPermissions($permissions);
     }
 }

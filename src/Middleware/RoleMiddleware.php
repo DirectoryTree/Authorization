@@ -2,34 +2,18 @@
 
 namespace Larapacks\Authorization\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-
-class RoleMiddleware
+class RoleMiddleware extends AuthorizationMiddleware
 {
     /**
-     * Run the request filter.
+     * Determine if the user has the required roles to access the route.
      *
-     * @param Request $request
-     * @param Closure $next
-     * @param array   $roles
+     * @param \App\User  $user
+     * @param array|null $roles
      *
-     * @return mixed
+     * @return bool
      */
-    public function handle(Request $request, Closure $next, $roles = null)
+    protected function authorize($user, $roles = null)
     {
-        $args = func_get_args();
-
-        if ($args > 3) {
-            // If we've been given more than one role, we
-            // need to retrieve all of them from the method.
-            $roles = array_slice($args, 2);
-        }
-
-        if (! $request->user()->hasRoles($roles)) {
-            abort(403, 'Unauthorized.');
-        }
-
-        return $next($request);
+        return $user->hasRoles($roles);
     }
 }
