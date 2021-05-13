@@ -107,16 +107,19 @@ Be sure to add the relevant traits for each of your custom models:
 **Role Model**:
 
 ```php
+use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\ManagesPermissions;
 
 class Role extends Model
 {
     use ManagesPermissions;
+}
 ```
 
 **Permission Model**:
 
 ```php
+use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\HasUsers;
 use Larapacks\Authorization\Traits\HasRoles;
 use Larapacks\Authorization\Traits\ClearsCachedPermissions;
@@ -124,6 +127,7 @@ use Larapacks\Authorization\Traits\ClearsCachedPermissions;
 class Permission extends Model
 {
     use HasUsers, HasRoles, ClearsCachedPermissions;
+}
 ```
 
 ## Usage
