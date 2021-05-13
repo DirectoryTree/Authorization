@@ -2,9 +2,9 @@
 
 namespace Larapacks\Authorization;
 
-use PDOException;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;
+use PDOException;
 
 class PermissionRegistrar
 {

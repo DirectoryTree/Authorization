@@ -3,9 +3,9 @@
 namespace Larapacks\Authorization;
 
 use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\HasUsers;
-use Larapacks\Authorization\Traits\HasRoles;
 use Larapacks\Authorization\Traits\ClearsCachedPermissions;
+use Larapacks\Authorization\Traits\HasRoles;
+use Larapacks\Authorization\Traits\HasUsers;
 
 class Permission extends Model
 {
