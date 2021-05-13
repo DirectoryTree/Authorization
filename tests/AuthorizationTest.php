@@ -661,7 +661,7 @@ class AuthorizationTest extends TestCase
             $this->createPermission([
                 'name'  => 'edit',
                 'label' => 'Edit',
-            ])
+            ]),
         ]);
 
         $keys = $permissions->map->id;

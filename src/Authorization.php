@@ -89,7 +89,7 @@ class Authorization
      */
     public static function cacheKey($cacheKey = null)
     {
-        if(is_null($cacheKey)) {
+        if (is_null($cacheKey)) {
             return static::$cacheKey;
         }
 

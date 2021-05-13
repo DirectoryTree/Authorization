@@ -2,8 +2,8 @@
 
 namespace Larapacks\Authorization\Tests;
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Larapacks\Authorization\Authorization;
 use Larapacks\Authorization\AuthorizationServiceProvider;
 use Larapacks\Authorization\Tests\Stubs\User;

@@ -128,7 +128,7 @@ trait Authorizable
         $roles = $permission->roles()->get()->map(function ($role) {
             return $role->getKey();
         });
-        
+
         return $this->roles()
                 ->whereIn($this->roles()->getRelatedPivotKeyName(), $roles)
                 ->count() > 0;
@@ -151,7 +151,7 @@ trait Authorizable
 
         return $permissions->filter(function ($permission) {
             return $this->hasPermission($permission);
-        })->count() ===  $permissions->count();
+        })->count() === $permissions->count();
     }
 
     /**
@@ -181,7 +181,7 @@ trait Authorizable
     }
 
     /**
-     * Determine if the user does not have all of the given permissions
+     * Determine if the user does not have all of the given permissions.
      *
      * @param array|\Illuminate\Support\Collection $permissions
      *
