@@ -77,7 +77,7 @@ public function register()
 
 By default, the `App\User` class is registered as the authorizable user model.
 
-You're free to extend the models used internally by Authorization.
+You're free to extend the models used internally by Authorization, or create your own.
 
 Instruct Authorization to use your own models via the `Authorization` class in your `AuthServiceProvider`:
 
