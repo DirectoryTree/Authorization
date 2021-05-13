@@ -105,30 +105,33 @@ trait Authorizable
     public function hasPermission($permission)
     {
         if (is_string($permission)) {
-            // If we weren't given a permission model, we'll try to find it by name.
+            // If we've been given a string, then we can
+            // assume its the permissions name. We will
+            // attempt to fetch it from the database.
             $permission = Authorization::permission()->whereName($permission)->first();
         }
 
-        if ($permission instanceof Model) {
-            // We'll first check to see if the user was given this explicit permission.
-            if ($this->permissions()->find($permission->getKey())) {
-                return true;
-            }
-
-            // Otherwise, we'll determine their permission by gathering
-            // the roles that the permission belongs to and checking
-            // if the user is a member of any of the roles.
-            $roles = $permission->roles()->get()->map(function ($role) {
-                return $role->getKey();
-            });
-
-            // Determine if the user is a member of any of the permissions roles.
-            return $this->roles()
-                    ->whereIn($this->roles()->getRelatedPivotKeyName(), $roles)
-                    ->count() > 0;
+        if (! $permission instanceof Model) {
+            return false;
         }
 
-        return false;
+        // Here we will check if the user has been granted
+        // explicit this permission explicitly. If so, we
+        // can return here. No further check is needed.
+        if ($this->permissions()->find($permission->getKey())) {
+            return true;
+        }
+
+        // Otherwise, we'll determine their permission by gathering
+        // the roles that the permission belongs to and checking
+        // if the user is a member of any of the fetched roles.
+        $roles = $permission->roles()->get()->map(function ($role) {
+            return $role->getKey();
+        });
+        
+        return $this->roles()
+                ->whereIn($this->roles()->getRelatedPivotKeyName(), $roles)
+                ->count() > 0;
     }
 
     /**
