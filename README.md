@@ -1,6 +1,6 @@
 # Authorization
 
-[![Build Status](https://img.shields.io/travis/larapacks/authorization/master.svg?style=flat-square)](https://travis-ci.org/larapacks/authorization)
+[![Build Status](https://img.shields.io/github/workflow/status/directorytree/ldaprecord/run-tests.svg?style=flat-square)](https://github.com/DirectoryTree/LdapRecord/actions)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/larapacks/authorization/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/larapacks/authorization/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
 [![Latest Stable Version](https://img.shields.io/packagist/v/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
@@ -22,7 +22,7 @@ An easy, native role / permission management system for Laravel.
 
 ## Installation
 
->**Note**: Laravel 5.5 or greater is required.
+> **Note**: Laravel 5.5 or greater is required.
 
 To get started, install Authorization via the Composer package manager:
 
@@ -31,7 +31,7 @@ To get started, install Authorization via the Composer package manager:
 The Authorization service provider registers its own database migration directory
 with the framework, so you should migrate your database after installing the
 package. The Authorization migrations will create the tables your
-application needs to store roles and permissions: 
+application needs to store roles and permissions:
 
     php artisan migrate
 
@@ -105,6 +105,7 @@ public function boot()
 Be sure to add the relevant traits for each of your custom models:
 
 **Role Model**:
+
 ```php
 use Larapacks\Authorization\Traits\ManagesPermissions;
 
@@ -114,6 +115,7 @@ class Role extends Model
 ```
 
 **Permission Model**:
+
 ```php
 use Larapacks\Authorization\Traits\HasUsers;
 use Larapacks\Authorization\Traits\HasRoles;
@@ -187,7 +189,7 @@ Using Laravel's native `authorize()` method in your controllers:
 public function create()
 {
     $this->authorize('users.create');
-    
+
     User::create(['...']);
 }
 ```
@@ -383,10 +385,10 @@ protected $routeMiddleware = [
     'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
     'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-    
+
     // The role middleware:
     'role' => \Larapacks\Authorization\Middleware\RoleMiddleware::class,
-    
+
     // The permission middleware:
     'permission' => \Larapacks\Authorization\Middleware\PermissionMiddleware::class,
 ];
@@ -442,7 +444,7 @@ use Larapacks\Authorization\PermissionRegistrar;
 protected function setUp() : void
 {
     parent::setUp();
-    
+
     app(PermissionResistrar::class)->register();
 }
 ```
