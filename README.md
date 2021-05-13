@@ -48,6 +48,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Authorizable;
+    
+    // ...
+}
 ```
 
 You can now perform user authorization.
