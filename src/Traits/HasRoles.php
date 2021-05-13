@@ -2,8 +2,8 @@
 
 namespace Larapacks\Authorization\Traits;
 
-use Larapacks\Authorization\RolePivot;
 use Larapacks\Authorization\Authorization;
+use Larapacks\Authorization\RolePivot;
 
 trait HasRoles
 {
