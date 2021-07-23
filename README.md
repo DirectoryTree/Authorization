@@ -57,7 +57,7 @@ You can now perform user authorization.
 
 ### Migration Customization
 
-If you would not like to use Authorizations default migrations, you should call the
+If you would not like to use Authorization's default migrations, you should call the
 `Authorization::ignoreMigrations` method in the `register` method of your
 `AppServiceProvider`. You may export the default migrations using
 `php artisan vendor:publish --tag=authorization-migrations`.
