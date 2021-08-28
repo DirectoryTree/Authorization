@@ -46,7 +46,7 @@ class Authorization
      *
      * @var string
      */
-    public static $userModel = 'App\User';
+    public static $userModel = 'App\Models\User';
 
     /**
      * The role model class name.
