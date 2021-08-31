@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 
 trait ManagesPermissions
 {
-    use HasPermissions, HasUsers;
+    use HasPermissions, HasUsers, AssociatesPermissions;
 
     /**
      * Returns true / false if the current role has the specified permission.
@@ -55,67 +55,5 @@ trait ManagesPermissions
         return collect(Arr::wrap($permissions))->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->count() > 0;
-    }
-
-    /**
-     * Grant the given permission to a role.
-     *
-     * Returns the granted permission(s).
-     *
-     * @param Model|Model[] $permissions
-     *
-     * @return Model|\Illuminate\Support\Collection
-     */
-    public function grant($permissions)
-    {
-        if ($permissions instanceof Model) {
-            return $this->hasPermission($permissions)
-                ? $permissions
-                : $this->permissions()->save($permissions);
-        }
-
-        return collect($permissions)->filter(function ($permission) {
-            return $permission instanceof Model
-                ? $this->grant($permission)
-                : false;
-        });
-    }
-
-    /**
-     * Revoke the given permission to a role.
-     *
-     * Returns a collection of revoked permissions.
-     *
-     * @param Model|Model[] $permissions
-     *
-     * @return Model|\Illuminate\Support\Collection
-     */
-    public function revoke($permissions)
-    {
-        if ($permissions instanceof Model) {
-            if (! $this->hasPermission($permissions)) {
-                return $permissions;
-            }
-
-            $this->permissions()->detach($permissions);
-
-            return $permissions;
-        }
-
-        return collect($permissions)->filter(function ($permission) {
-            return $permission instanceof Model
-                ? $this->revoke($permission)
-                : false;
-        });
-    }
-
-    /**
-     * Revokes all permissions on the current role.
-     *
-     * @return int
-     */
-    public function revokeAll()
-    {
-        return $this->permissions()->detach();
     }
 }

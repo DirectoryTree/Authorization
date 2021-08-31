@@ -7,7 +7,7 @@ use Larapacks\Authorization\Authorization;
 
 trait Authorizable
 {
-    use HasRoles, HasPermissions;
+    use HasRoles, HasPermissions, AssociatesPermissions;
 
     /**
      * Assign the given role to the user.

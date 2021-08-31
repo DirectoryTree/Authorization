@@ -119,6 +119,26 @@ class AuthorizationTest extends TestCase
         $this->assertTrue($user->hasPermission($createUsers));
         $this->assertTrue($admin->hasPermission($createUsers));
     }
+    
+    public function test_grant_permission_on_user()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $this->assertTrue($createUsers->is($user->grant('users.create')));
+        $this->assertTrue($user->hasPermission('users.create'));
+        $this->assertSame($createUsers, $user->grant($createUsers));
+
+        $user->revoke('users.create');
+
+        $this->assertFalse($user->hasPermission('users.create'));
+    }
 
     public function test_grant_multiple_permissions()
     {
@@ -159,6 +179,33 @@ class AuthorizationTest extends TestCase
 
         $this->assertTrue($admin->hasPermission($createUsers));
         $this->assertTrue($admin->hasPermission($editUsers));
+    }
+
+    public function test_grant_multiple_permissions_on_user()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $editUsers = $this->createPermission([
+            'name'  => 'users.edit',
+            'label' => 'Edit Users',
+        ]);
+
+        $granted = $user->grant([$createUsers, $editUsers, 'invalid']);
+
+        $this->assertInstanceOf(Collection::class, $granted);
+        $this->assertSame($createUsers, $granted->get(0));
+        $this->assertSame($editUsers, $granted->get(1));
+        $this->assertCount(2, $granted);
+
+        $this->assertTrue($user->hasPermission($createUsers));
+        $this->assertTrue($user->hasPermission($editUsers));
     }
 
     public function test_grant_multiple_permissions_with_non_existent_permission()
@@ -216,6 +263,26 @@ class AuthorizationTest extends TestCase
         $this->assertFalse($user->hasPermission($createUsers));
     }
 
+    public function test_revoke_permission_on_user()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+        
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $user->grant($createUsers);
+
+        $this->assertTrue($user->hasPermission($createUsers));
+
+        $this->assertSame($createUsers, $user->revoke($createUsers));
+
+        $this->assertFalse($user->hasPermission($createUsers));
+    }
+
     public function test_revoke_multiple_permissions()
     {
         $user = $this->createUser([
@@ -254,6 +321,95 @@ class AuthorizationTest extends TestCase
 
         $this->assertFalse($user->hasPermission($editUsers));
         $this->assertFalse($user->hasPermission($createUsers));
+    }
+
+    public function test_revoke_multiple_permissions_on_user()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $editUsers = $this->createPermission([
+            'name'  => 'users.edit',
+            'label' => 'Edit Users',
+        ]);
+
+        $user->grant([$createUsers, $editUsers]);
+
+        $this->assertTrue($user->hasPermission($editUsers));
+        $this->assertTrue($user->hasPermission($createUsers));
+
+        $this->assertCount(2, $user->revoke([$createUsers, $editUsers, 'invalid']));
+
+        $this->assertFalse($user->hasPermission($editUsers));
+        $this->assertFalse($user->hasPermission($createUsers));
+    }
+
+    public function test_revoke_all()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $editUsers = $this->createPermission([
+            'name'  => 'users.edit',
+            'label' => 'Edit Users',
+        ]);
+
+        $admin = $this->createRole([
+            'name' => 'admin',
+            'label' => 'Administrator',
+        ]);
+
+        $admin->grant([$createUsers, $editUsers]);
+
+        $user->assignRole($admin);
+
+        $this->assertTrue($admin->hasPermissions([$createUsers, $editUsers]));
+        $this->assertTrue($user->hasPermissions([$createUsers, $editUsers]));
+
+        $admin->revokeAll();
+
+        $this->assertFalse($admin->hasPermissions([$createUsers, $editUsers]));
+        $this->assertFalse($admin->hasPermission('users.create'));
+        $this->assertFalse($admin->hasPermission('users.edit'));
+    }
+
+    public function test_revoke_all_on_user()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $editUsers = $this->createPermission([
+            'name'  => 'users.edit',
+            'label' => 'Edit Users',
+        ]);
+
+        $user->grant([$createUsers, $editUsers]);
+
+        $this->assertTrue($user->hasPermissions([$createUsers, $editUsers]));
+
+        $user->revokeAll();
+
+        $this->assertFalse($user->hasPermissions([$createUsers, $editUsers]));
+        $this->assertFalse($user->hasPermission('users.create'));
+        $this->assertFalse($user->hasPermission('users.edit'));
     }
 
     public function test_revoke_multiple_permissions_with_non_existent_permission()
