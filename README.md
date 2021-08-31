@@ -1,12 +1,30 @@
-# Authorization
+<!-- readme.md -->
 
-[![Build Status](https://img.shields.io/github/workflow/status/directorytree/ldaprecord/run-tests.svg?style=flat-square)](https://github.com/DirectoryTree/LdapRecord/actions)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/directorytree/authorization/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/directorytree/authorization/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/directorytree/authorization.svg?style=flat-square)](https://packagist.org/packages/directorytree/authorization)
-[![Latest Stable Version](https://img.shields.io/packagist/v/directorytree/authorization.svg?style=flat-square)](https://packagist.org/packages/directorytree/authorization)
-[![License](https://img.shields.io/packagist/l/directorytree/authorization.svg?style=flat-square)](https://packagist.org/packages/directorytree/authorization)
+<p align="center">
+<img src="https://github.com/DirectoryTree/Authorization/blob/master/art/logo.svg" width="400">
+</p>
 
+<p align="center">
+<a href="https://github.com/DirectoryTree/Authorization/actions">
+<img src="https://img.shields.io/github/workflow/status/directorytree/Authorization/run-tests.svg?style=flat-square">
+</a>
+<a href="https://scrutinizer-ci.com/g/DirectoryTree/Authorization/?branch=master">
+<img src="https://img.shields.io/scrutinizer/g/DirectoryTree/Authorization/master.svg?style=flat-square"/>
+</a>
+<a href="https://packagist.org/packages/DirectoryTree/Authorization">
+<img src="https://img.shields.io/packagist/dt/DirectoryTree/Authorization.svg?style=flat-square"/>
+</a>
+<a href="https://packagist.org/packages/DirectoryTree/Authorization">
+<img src="https://img.shields.io/packagist/v/DirectoryTree/Authorization.svg?style=flat-square"/>
+</a>
+<a href="https://packagist.org/packages/DirectoryTree/Authorization">
+<img src="https://img.shields.io/github/license/DirectoryTree/Authorization.svg?style=flat-square"/>
+</a>
+</p>
+
+<p align="center">
 An easy, native role / permission management system for Laravel.
+</p>
 
 ## Index
 
