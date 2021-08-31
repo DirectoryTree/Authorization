@@ -157,57 +157,151 @@ class Permission extends Model
 
 ## Usage
 
-Authorization utilizes native Laravel relationships, so there's no need to learn a new API.
+Authorization uses native Laravel relationships, so there's no need to learn a new API if you don't want to.
+
+### Managing Roles & Permissions
 
 Create a permission:
 
 ```php
-$createUsers = new Permission();
+$createUsers = Permission::create([
+    'name' => 'users.create',
+    'label' => 'Create Users',
+]);
+```
 
-$createUsers->name = 'users.create';
-$createUsers->label = 'Create Users';
+Create a role:
 
-$createUsers->save();
+```php
+$admin = Role::create([
+    'name' => 'administrator',
+    'label' => 'Admin',
+]);
 ```
 
 Grant the permission to a role:
 
 ```php
-$administrator = new Role();
-
-$administrator->name = 'administrator';
-$administrator->label = 'Admin';
-
-$administrator->save();
-
-$administrator->permissions()->save($createUsers);
+$admin->permissions()->save($createUsers);
 ```
 
 Now assign the role to the user:
 
 ```php
-$user->roles()->save($administrator);
+$user->roles()->save($admin);
 ```
+
+You may also use the `grant()` or `revoke()` method on a `Role` model:
+
+```php
+// Using the permission's name:
+$admin->grant('users.create');
+
+// Using a permission model:
+$admin->grant($permission);
+
+// Granting multiple permissions:
+$admin->grant(['users.create', 'users.edit']);
+
+// Granting a collection of models:
+$admin->grant(Permission::all());
+
+// Using a mix of models and permission name:
+$admin->grant([$createUsers, 'users.edit']);
+```
+
+You may also sync a role's permissions using the `grantOnly()` method:
+
+```php
+// All permissions will be removed except, except for the given:
+$admin->grantOnly('users.create');
+```
+
+```php
+// Using the permission's name:
+$admin->revoke('users.create');
+
+// Using a permission model:
+$admin->revoke($permission);
+
+// Granting multiple permissions:
+$admin->revoke(['users.create', 'users.edit']);
+
+// Granting a collection of models:
+$admin->revoke(Permission::all());
+
+// Using a mix of models and permission name:
+$admin->revoke([$createUsers, 'users.edit']);
+```
+
+You may also detach all permissions from a role using `revokeAll()`:
+
+```php
+$admin->revokeAll();
+```
+
+### Managing Users & Permissions
 
 You can also create user specific permissions:
 
 ```php
-$createUsers = new Permission();
-
-$createUsers->name = 'users.create';
-$createUsers->label = 'Create Users';
-
-$createUsers->save();
+$createUsers = Permission::create([
+    'name' => 'users.create',
+    'label' => 'Create Users',
+]);
 
 $user->permissions()->save($createUsers);
 ```
 
-### Checking Permissions & Roles
-
-Using Laravel's native `$user->can()` method:
+As with roles, may also use the `grant()` or `revoke()` method on an authorizable `User` model:
 
 ```php
-if ($user->can('users.create')) {
+// Using the permission's name:
+$user->grant('users.create');
+
+// Using a permission model:
+$user->grant($permission);
+
+// Granting multiple permissions:
+$user->grant(['users.create', 'users.edit']);
+
+// Granting a collection of models:
+$user->grant(Permission::all());
+
+// Using a mix of models and permission name:
+$user->grant([$createUsers, 'users.edit']);
+```
+
+You may also sync a role's permissions using the `grantOnly()` method:
+
+```php
+// All permissions will be removed except, except for the given:
+$user->grantOnly('users.create');
+```
+
+```php
+// Using the permission's name:
+$user->revoke('users.create');
+
+// Using a permission model:
+$user->revoke($permission);
+
+// Granting multiple permissions:
+$user->revoke(['users.create', 'users.edit']);
+
+// Granting a collection of models:
+$user->revoke(Permission::all());
+
+// Using a mix of models and permission name:
+$user->revoke([$createUsers, 'users.edit']);
+```
+
+### Checking Permissions & Roles
+
+Using Laravel's native `can()` method:
+
+```php
+if (Auth::user()->can('users.create')) {
     // This user can create other users.
 }
 ```
@@ -258,7 +352,7 @@ if ($user->hasPermission($createUsers)) {
 Checking for multiple permissions:
 
 ```php
-if (auth()->user()->hasPermissions(['users.create', 'users.edit'])) {
+if ($user->hasPermissions(['users.create', 'users.edit'])) {
     // This user has both creation and edit rights.
 } else {
     // It looks like the user doesn't have one of the specified permissions.
@@ -268,7 +362,7 @@ if (auth()->user()->hasPermissions(['users.create', 'users.edit'])) {
 Checking if the user has any permissions:
 
 ```php
-if (auth()->user()->hasAnyPermissions(['users.create', 'users.edit', 'users.destroy'])) {
+if ($user->hasAnyPermissions(['users.create', 'users.edit', 'users.destroy'])) {
     // This user either has create, edit or destroy permissions.
 } else {
     // It looks like the user doesn't have any of the specified permissions.
@@ -278,7 +372,7 @@ if (auth()->user()->hasAnyPermissions(['users.create', 'users.edit', 'users.dest
 Checking if the user has a role:
 
 ```php
-if (auth()->user()->hasRole('administrator')) {
+if ($user->hasRole('administrator')) {
     // This user is an administrator.
 } else {
     // It looks like the user isn't an administrator.
@@ -288,7 +382,7 @@ if (auth()->user()->hasRole('administrator')) {
 Checking if the user has specified roles:
 
 ```php
-if (auth()->user()->hasRoles(['administrator', 'member'])) {
+if ($user->hasRoles(['administrator', 'member'])) {
     // This user is an administrator and a member.
 } else {
     // It looks like the user isn't an administrator or member.
@@ -298,7 +392,7 @@ if (auth()->user()->hasRoles(['administrator', 'member'])) {
 Checking if the user has any specified roles:
 
 ```php
-if (auth()->user()->hasAnyRoles(['administrator', 'member', 'guest'])) {
+if ($user->hasAnyRoles(['administrator', 'member', 'guest'])) {
     // This user is either an administrator, member or guest.
 } else {
     // It looks like the user doesn't have any of these roles.
@@ -477,24 +571,3 @@ protected function setUp() : void
     app(PermissionResistrar::class)->register();
 }
 ```
-
-## Upgrading v1 to v2
-
-### Configuration
-
-Configuration is now done via static methods on the `Authorization` class.
-
-You may delete the published `config/authorization.php` file.
-
-### Traits
-
-The `UserRolesTrait` has been renamed to `Authorizable`.
-
-The `PermissionRolesTrait` has been separated into multiple traits.
-You must apply the `HasRoles`, `HasUsers`, and `ClearsCachedPermissions` traits.
-
-The `RolePermissionsTrait` has been renamed to `ManagesPermissions`.
-
-### Closure Permissions
-
-Permission closures have been removed. If you still require this functionality, continue using v1.
