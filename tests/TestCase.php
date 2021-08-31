@@ -1,12 +1,12 @@
 <?php
 
-namespace Larapacks\Authorization\Tests;
+namespace DirectoryTree\Authorization\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
-use Larapacks\Authorization\Authorization;
-use Larapacks\Authorization\AuthorizationServiceProvider;
-use Larapacks\Authorization\Tests\Stubs\User;
+use DirectoryTree\Authorization\Authorization;
+use DirectoryTree\Authorization\AuthorizationServiceProvider;
+use DirectoryTree\Authorization\Tests\Stubs\User;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
@@ -52,7 +52,7 @@ class TestCase extends BaseTestCase
      *
      * @param array $attributes
      *
-     * @return \Larapacks\Authorization\Role
+     * @return \DirectoryTree\Authorization\Role
      */
     protected function createRole($attributes = [])
     {
@@ -66,7 +66,7 @@ class TestCase extends BaseTestCase
      *
      * @param array $attributes
      *
-     * @return \Larapacks\Authorization\Permission
+     * @return \DirectoryTree\Authorization\Permission
      */
     protected function createPermission($attributes = [])
     {

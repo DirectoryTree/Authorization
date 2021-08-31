@@ -1,10 +1,10 @@
 <?php
 
-namespace Larapacks\Authorization\Tests;
+namespace DirectoryTree\Authorization\Tests;
 
 use Illuminate\Support\Collection;
-use Larapacks\Authorization\Authorization;
-use Larapacks\Authorization\PermissionRegistrar;
+use DirectoryTree\Authorization\Authorization;
+use DirectoryTree\Authorization\PermissionRegistrar;
 
 class AuthorizationTest extends TestCase
 {

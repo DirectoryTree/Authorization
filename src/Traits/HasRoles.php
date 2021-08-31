@@ -1,9 +1,9 @@
 <?php
 
-namespace Larapacks\Authorization\Traits;
+namespace DirectoryTree\Authorization\Traits;
 
-use Larapacks\Authorization\Authorization;
-use Larapacks\Authorization\RolePivot;
+use DirectoryTree\Authorization\Authorization;
+use DirectoryTree\Authorization\RolePivot;
 
 trait HasRoles
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapacks\Authorization;
+namespace DirectoryTree\Authorization;
 
 use DateTimeInterface;
 
@@ -53,14 +53,14 @@ class Authorization
      *
      * @var string
      */
-    public static $roleModel = 'Larapacks\Authorization\Role';
+    public static $roleModel = 'DirectoryTree\Authorization\Role';
 
     /**
      * The permission model class name.
      *
      * @var string
      */
-    public static $permissionModel = 'Larapacks\Authorization\Permission';
+    public static $permissionModel = 'DirectoryTree\Authorization\Permission';
 
     /**
      * Get or set when the permission cache expires.

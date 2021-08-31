@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapacks\Authorization\Middleware;
+namespace DirectoryTree\Authorization\Middleware;
 
 class RoleMiddleware extends AuthorizationMiddleware
 {

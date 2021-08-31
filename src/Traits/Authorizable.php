@@ -1,9 +1,9 @@
 <?php
 
-namespace Larapacks\Authorization\Traits;
+namespace DirectoryTree\Authorization\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 trait Authorizable
 {

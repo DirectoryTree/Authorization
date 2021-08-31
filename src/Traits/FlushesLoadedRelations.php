@@ -1,8 +1,8 @@
 <?php
 
-namespace Larapacks\Authorization\Traits;
+namespace DirectoryTree\Authorization\Traits;
 
-use Larapacks\Authorization\Pivot;
+use DirectoryTree\Authorization\Pivot;
 
 trait FlushesLoadedRelations
 {

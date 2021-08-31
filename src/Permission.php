@@ -1,11 +1,11 @@
 <?php
 
-namespace Larapacks\Authorization;
+namespace DirectoryTree\Authorization;
 
 use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\ClearsCachedPermissions;
-use Larapacks\Authorization\Traits\HasRoles;
-use Larapacks\Authorization\Traits\HasUsers;
+use DirectoryTree\Authorization\Traits\ClearsCachedPermissions;
+use DirectoryTree\Authorization\Traits\HasRoles;
+use DirectoryTree\Authorization\Traits\HasUsers;
 
 class Permission extends Model
 {

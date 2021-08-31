@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapacks\Authorization;
+namespace DirectoryTree\Authorization;
 
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;

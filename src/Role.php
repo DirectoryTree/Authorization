@@ -1,9 +1,9 @@
 <?php
 
-namespace Larapacks\Authorization;
+namespace DirectoryTree\Authorization;
 
 use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\ManagesPermissions;
+use DirectoryTree\Authorization\Traits\ManagesPermissions;
 
 class Role extends Model
 {

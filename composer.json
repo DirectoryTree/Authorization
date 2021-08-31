@@ -1,5 +1,5 @@
 {
-  "name": "larapacks/authorization",
+  "name": "directorytree/authorization",
   "description": "Native Laravel Authorization.",
   "keywords": ["authorization", "laravel", "permissions", "roles", "acl"],
   "license": "MIT",
@@ -14,18 +14,18 @@
   },
   "autoload": {
     "psr-4": {
-      "Larapacks\\Authorization\\": "src/"
+      "DirectoryTree\\Authorization\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Larapacks\\Authorization\\Tests\\": "tests/"
+      "DirectoryTree\\Authorization\\Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Larapacks\\Authorization\\AuthorizationServiceProvider"
+        "DirectoryTree\\Authorization\\AuthorizationServiceProvider"
       ]
     }
   }

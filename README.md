@@ -1,24 +1,24 @@
 # Authorization
 
 [![Build Status](https://img.shields.io/github/workflow/status/directorytree/ldaprecord/run-tests.svg?style=flat-square)](https://github.com/DirectoryTree/LdapRecord/actions)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/larapacks/authorization/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/larapacks/authorization/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
-[![Latest Stable Version](https://img.shields.io/packagist/v/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
-[![License](https://img.shields.io/packagist/l/larapacks/authorization.svg?style=flat-square)](https://packagist.org/packages/larapacks/authorization)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/directorytree/authorization/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/directorytree/authorization/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/directorytree/authorization.svg?style=flat-square)](https://packagist.org/packages/directorytree/authorization)
+[![Latest Stable Version](https://img.shields.io/packagist/v/directorytree/authorization.svg?style=flat-square)](https://packagist.org/packages/directorytree/authorization)
+[![License](https://img.shields.io/packagist/l/directorytree/authorization.svg?style=flat-square)](https://packagist.org/packages/directorytree/authorization)
 
 An easy, native role / permission management system for Laravel.
 
 ## Index
 
-- [Installation](#installation)
-  - [Migration Customization](#migration-customization)
-  - [Model Customization](#model-customization)
-- [Usage](#usage)
-- [Checking Permissions & Roles](#checking-permissions--roles)
-- [Caching](#caching)
-- [Gate Registration](#gate-registration)
-- [Middleware](#middleware)
-- [Testing](#running-tests)
+-   [Installation](#installation)
+    -   [Migration Customization](#migration-customization)
+    -   [Model Customization](#model-customization)
+-   [Usage](#usage)
+-   [Checking Permissions & Roles](#checking-permissions--roles)
+-   [Caching](#caching)
+-   [Gate Registration](#gate-registration)
+-   [Middleware](#middleware)
+-   [Testing](#running-tests)
 
 ## Installation
 
@@ -26,7 +26,7 @@ An easy, native role / permission management system for Laravel.
 
 To get started, install Authorization via the Composer package manager:
 
-    composer require larapacks/authorization
+    composer require directorytree/authorization
 
 The Authorization service provider registers its own database migration directory
 with the framework, so you should migrate your database after installing the
@@ -35,20 +35,20 @@ application needs to store roles and permissions:
 
     php artisan migrate
 
-Now insert the `Larapacks\Authorization\Traits\Authorizable` onto your `App\Models\User` model:
+Now insert the `DirectoryTree\Authorization\Traits\Authorizable` onto your `App\Models\User` model:
 
 ```php
 <?php
 
 namespace App\Models;
 
-use Larapacks\Authorization\Traits\Authorizable;
+use DirectoryTree\Authorization\Traits\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Authorizable;
-    
+
     // ...
 }
 ```
@@ -63,7 +63,7 @@ If you would not like to use Authorization's default migrations, you should call
 `php artisan vendor:publish --tag=authorization-migrations`.
 
 ```php
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 /**
  * Register any application services.
@@ -88,7 +88,7 @@ Instruct Authorization to use your own models via the `Authorization` class in y
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Permission;
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 /**
  * Register any authentication / authorization services.
@@ -113,7 +113,7 @@ Be sure to add the relevant traits for each of your custom models:
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\ManagesPermissions;
+use DirectoryTree\Authorization\Traits\ManagesPermissions;
 
 class Role extends Model
 {
@@ -127,9 +127,9 @@ class Role extends Model
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Larapacks\Authorization\Traits\HasUsers;
-use Larapacks\Authorization\Traits\HasRoles;
-use Larapacks\Authorization\Traits\ClearsCachedPermissions;
+use DirectoryTree\Authorization\Traits\HasUsers;
+use DirectoryTree\Authorization\Traits\HasRoles;
+use DirectoryTree\Authorization\Traits\ClearsCachedPermissions;
 
 class Permission extends Model
 {
@@ -296,7 +296,7 @@ This cache is automatically flushed when permissions are created, updated, or de
 If you would like to disable the cache, call `Authorization::disablePermissionCache` in your `AuthServiceProvider`:
 
 ```php
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 /**
  * Register any authentication / authorization services.
@@ -318,7 +318,7 @@ By default, the permission cache key is `authorization.permissions`.
 To alter the cache key, call `Authorization::cacheKey` in your `AuthServiceProvider`:
 
 ```php
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 /**
  * Register any authentication / authorization services.
@@ -340,7 +340,7 @@ By default, the permission cache will expire daily.
 To alter this expiry date, call `Authorization::cacheExpiresIn` in your `AuthServiceProvider`:
 
 ```php
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 /**
  * Register any authentication / authorization services.
@@ -362,7 +362,7 @@ By default all permissions you create are registered in Laravel's Gate.
 If you would like to disable this, call `Authorization::disableGateRegistration` in your `AuthServiceProvider`:
 
 ```php
-use Larapacks\Authorization\Authorization;
+use DirectoryTree\Authorization\Authorization;
 
 /**
  * Register any authentication / authorization services.
@@ -398,10 +398,10 @@ protected $routeMiddleware = [
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
     // The role middleware:
-    'role' => \Larapacks\Authorization\Middleware\RoleMiddleware::class,
+    'role' => \DirectoryTree\Authorization\Middleware\RoleMiddleware::class,
 
     // The permission middleware:
-    'permission' => \Larapacks\Authorization\Middleware\PermissionMiddleware::class,
+    'permission' => \DirectoryTree\Authorization\Middleware\PermissionMiddleware::class,
 ];
 ```
 
@@ -448,7 +448,7 @@ inside your `TestCase::setUp()` method **before** running your
 tests for permissions to register properly:
 
 ```php
-use Larapacks\Authorization\PermissionRegistrar;
+use DirectoryTree\Authorization\PermissionRegistrar;
 ```
 
 ```php

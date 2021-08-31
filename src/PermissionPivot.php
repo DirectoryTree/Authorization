@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapacks\Authorization;
+namespace DirectoryTree\Authorization;
 
 class PermissionPivot extends Pivot
 {
