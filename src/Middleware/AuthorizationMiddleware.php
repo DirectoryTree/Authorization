@@ -19,10 +19,20 @@ abstract class AuthorizationMiddleware
     public function handle(Request $request, Closure $next, ...$auth)
     {
         if (! $this->authorize($request->user(), $auth)) {
-            abort(403, 'Unauthorized.');
+            return $this->unauthorized();
         }
 
         return $next($request);
+    }
+
+    /**
+     * Abort the application request.
+     *
+     * @return void
+     */
+    protected function unauthorized()
+    {
+        abort(403, 'Unauthorized.');
     }
 
     /**
