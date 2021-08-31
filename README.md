@@ -35,12 +35,12 @@ application needs to store roles and permissions:
 
     php artisan migrate
 
-Now insert the `Larapacks\Authorization\Traits\Authorizable` onto your `App\User` model:
+Now insert the `Larapacks\Authorization\Traits\Authorizable` onto your `App\Models\User` model:
 
 ```php
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Larapacks\Authorization\Traits\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -78,7 +78,7 @@ public function register()
 
 ### Model Customization
 
-By default, the `App\User` class is registered as the authorizable user model.
+By default, the `App\Models\User` class is registered as the authorizable user model.
 
 You're free to extend the models used internally by Authorization, or create your own.
 
@@ -110,6 +110,8 @@ Be sure to add the relevant traits for each of your custom models:
 **Role Model**:
 
 ```php
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\ManagesPermissions;
 
@@ -122,6 +124,8 @@ class Role extends Model
 **Permission Model**:
 
 ```php
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\HasUsers;
 use Larapacks\Authorization\Traits\HasRoles;
