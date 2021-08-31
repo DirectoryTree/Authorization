@@ -40,7 +40,7 @@ Now insert the `Larapacks\Authorization\Traits\Authorizable` onto your `App\Mode
 ```php
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Larapacks\Authorization\Traits\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -110,6 +110,8 @@ Be sure to add the relevant traits for each of your custom models:
 **Role Model**:
 
 ```php
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\ManagesPermissions;
 
@@ -122,6 +124,8 @@ class Role extends Model
 **Permission Model**:
 
 ```php
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Larapacks\Authorization\Traits\HasUsers;
 use Larapacks\Authorization\Traits\HasRoles;
