@@ -2,6 +2,7 @@
 
 namespace DirectoryTree\Authorization\Traits;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use DirectoryTree\Authorization\Authorization;
 
@@ -70,7 +71,7 @@ trait Authorizable
      */
     public function hasRoles($roles)
     {
-        $roles = collect($roles);
+        $roles = Collection::make($roles);
 
         if ($roles->isEmpty()) {
             return false;
@@ -90,7 +91,7 @@ trait Authorizable
      */
     public function hasAnyRoles($roles)
     {
-        return collect($roles)->filter(function ($role) {
+        return Collection::make($roles)->filter(function ($role) {
             return $this->hasRole($role);
         })->isNotEmpty();
     }
@@ -143,7 +144,7 @@ trait Authorizable
      */
     public function hasPermissions($permissions)
     {
-        $permissions = collect($permissions);
+        $permissions = Collection::make($permissions);
 
         if ($permissions->isEmpty()) {
             return false;
@@ -163,7 +164,7 @@ trait Authorizable
      */
     public function hasAnyPermissions($permissions)
     {
-        return collect($permissions)->filter(function ($permission) {
+        return Collection::make($permissions)->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->isNotEmpty();
     }

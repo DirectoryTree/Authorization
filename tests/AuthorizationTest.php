@@ -120,6 +120,47 @@ class AuthorizationTest extends TestCase
         $this->assertTrue($admin->hasPermission($createUsers));
     }
 
+    public function test_grant_only_permission()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $admin = $this->createRole([
+            'name'  => 'administrator',
+            'label' => 'Admin',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $editUsers = $this->createPermission([
+            'name'  => 'users.edit',
+            'label' => 'Edit Users',
+        ]);
+
+        $this->assertFalse($user->hasRole($admin));
+        $this->assertFalse($user->hasPermission($createUsers));
+        $this->assertFalse($user->hasPermission($editUsers));
+
+        $this->assertFalse($admin->hasPermission($createUsers));
+        $this->assertFalse($admin->hasPermission($editUsers));
+
+        $user->assignRole($admin);
+
+        $this->assertTrue($user->hasRole($admin));
+
+        $this->assertSame($createUsers, $admin->grantOnly($createUsers));
+
+        $this->assertTrue($user->hasPermission($createUsers));
+        $this->assertTrue($admin->hasPermission($createUsers));
+
+        $this->assertFalse($user->hasPermission($editUsers));
+        $this->assertFalse($admin->hasPermission($editUsers));
+    }
+
     public function test_grant_permission_on_user()
     {
         $user = $this->createUser([
@@ -138,6 +179,33 @@ class AuthorizationTest extends TestCase
         $user->revoke('users.create');
 
         $this->assertFalse($user->hasPermission('users.create'));
+    }
+
+    public function test_grant_only_permission_on_user()
+    {
+        $user = $this->createUser([
+            'name' => 'John Doe',
+        ]);
+
+        $createUsers = $this->createPermission([
+            'name'  => 'users.create',
+            'label' => 'Create Users',
+        ]);
+
+        $editUsers = $this->createPermission([
+            'name'  => 'users.edit',
+            'label' => 'Edit Users',
+        ]);
+
+        $user->grant([$createUsers, $editUsers]);
+
+        $this->assertTrue($user->hasPermission('users.create'));
+        $this->assertTrue($user->hasPermission('users.edit'));
+
+        $user->grantOnly($createUsers);
+
+        $this->assertFalse($user->hasPermission('users.edit'));
+        $this->assertTrue($user->hasPermission('users.create'));
     }
 
     public function test_grant_multiple_permissions()

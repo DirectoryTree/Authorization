@@ -2,8 +2,9 @@
 
 namespace DirectoryTree\Authorization\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 trait ManagesPermissions
 {
@@ -38,7 +39,7 @@ trait ManagesPermissions
      */
     public function hasPermissions($permissions)
     {
-        return collect(Arr::wrap($permissions))->filter(function ($permission) {
+        return Collection::make(Arr::wrap($permissions))->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->count() === count($permissions);
     }
@@ -52,7 +53,7 @@ trait ManagesPermissions
      */
     public function hasAnyPermissions($permissions)
     {
-        return collect(Arr::wrap($permissions))->filter(function ($permission) {
+        return Collection::make(Arr::wrap($permissions))->filter(function ($permission) {
             return $this->hasPermission($permission);
         })->count() > 0;
     }

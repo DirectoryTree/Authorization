@@ -2,6 +2,7 @@
 
 namespace DirectoryTree\Authorization\Traits;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use DirectoryTree\Authorization\Authorization;
 
@@ -14,7 +15,7 @@ trait AssociatesPermissions
      *
      * @param string|string[]|Model|Model[] $permissions
      *
-     * @return Model|Model[]|\Illuminate\Support\Collection
+     * @return Model|Model[]|Collection
      */
     public function grant($permissions)
     {
@@ -28,9 +29,23 @@ trait AssociatesPermissions
                 : $this->permissions()->save($permissions);
         }
 
-        return collect($permissions)->map(function ($permission) {
+        return Collection::make($permissions)->map(function ($permission) {
             return $this->grant($permission) instanceof Model ? $permission : false;
         })->filter();
+    }
+
+    /**
+     * Grant only the given permission(s), detaching any previous permission(s).
+     *
+     * @param string|string[]|Model|Model[] $permissions
+     *
+     * @return Model|Model[]|Collection
+     */
+    public function grantOnly($permissions)
+    {
+        $this->revokeAll();
+
+        return $this->grant($permissions);
     }
 
     /**
@@ -40,7 +55,7 @@ trait AssociatesPermissions
      *
      * @param string|string[]|Model|Model[] $permissions
      *
-     * @return Model|Model[]|\Illuminate\Support\Collection
+     * @return Model|Model[]|Collection
      */
     public function revoke($permissions)
     {
@@ -58,7 +73,7 @@ trait AssociatesPermissions
             return $permissions;
         }
 
-        return collect($permissions)->map(function ($permission) {
+        return Collection::make($permissions)->map(function ($permission) {
             return $this->revoke($permission) instanceof Model ? $permission : false;
         })->filter();
     }
