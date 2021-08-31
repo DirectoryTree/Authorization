@@ -272,7 +272,7 @@ $user->grant(Permission::all());
 $user->grant([$createUsers, 'users.edit']);
 ```
 
-You may also sync a role's permissions using the `grantOnly()` method:
+You may also sync a users' permissions using the `grantOnly()` method:
 
 ```php
 // All permissions will be removed except, except for the given:
