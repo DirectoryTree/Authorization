@@ -119,7 +119,7 @@ class AuthorizationTest extends TestCase
         $this->assertTrue($user->hasPermission($createUsers));
         $this->assertTrue($admin->hasPermission($createUsers));
     }
-    
+
     public function test_grant_permission_on_user()
     {
         $user = $this->createUser([
@@ -268,7 +268,7 @@ class AuthorizationTest extends TestCase
         $user = $this->createUser([
             'name' => 'John Doe',
         ]);
-        
+
         $createUsers = $this->createPermission([
             'name'  => 'users.create',
             'label' => 'Create Users',
