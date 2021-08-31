@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 trait ManagesPermissions
 {
-    use HasPermissions, HasUsers, AssociatesPermissions;
+    use HasUsers, HasPermissions, AssociatesPermissions;
 
     /**
-     * Returns true / false if the current role has the specified permission.
+     * Determine if the role has the given permission.
      *
      * @param string|Model $permission
      *
@@ -31,7 +31,7 @@ trait ManagesPermissions
     }
 
     /**
-     * Returns true / false if the current role has the specified permissions.
+     * Determine if the current role has the given permissions.
      *
      * @param string|array $permissions
      *
@@ -45,7 +45,7 @@ trait ManagesPermissions
     }
 
     /**
-     * Returns true / false if the current role has any of the specified permissions.
+     * Determine if the current role has any of the given permissions.
      *
      * @param array $permissions
      *
