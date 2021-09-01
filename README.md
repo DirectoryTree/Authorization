@@ -159,6 +159,8 @@ class Permission extends Model
 
 Authorization uses native Laravel relationships, so there's no need to learn a new API if you don't want to.
 
+> Due to Authorization's trait based implementation, all of Authorization's functionality can be overridden or extended with you own implementation.
+
 ### Managing Roles & Permissions
 
 Create a permission:
@@ -224,10 +226,10 @@ $admin->revoke('users.create');
 // Using a permission model:
 $admin->revoke($permission);
 
-// Granting multiple permissions:
+// Revoking multiple permissions:
 $admin->revoke(['users.create', 'users.edit']);
 
-// Granting a collection of models:
+// Revoking a collection of models:
 $admin->revoke(Permission::all());
 
 // Using a mix of models and permission name:
