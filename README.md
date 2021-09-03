@@ -570,6 +570,6 @@ protected function setUp() : void
 {
     parent::setUp();
 
-    app(PermissionResistrar::class)->register();
+    app(PermissionRegistrar::class)->register();
 }
 ```
