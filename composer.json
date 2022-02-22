@@ -1,32 +1,38 @@
 {
-  "name": "directorytree/authorization",
-  "description": "Native Laravel Authorization.",
-  "keywords": ["authorization", "laravel", "permissions", "roles", "acl"],
-  "license": "MIT",
-  "type": "project",
-  "require": {
-    "php": ">=7.0",
-    "illuminate/database": "^5.5|^6.0|^7.0|^8.0|^9.0"
-  },
-  "require-dev": {
-    "orchestra/testbench": "^3.7|^4.0|^5.0|^7.0",
-    "phpunit/phpunit": "^7.0|^8.0|^9.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "DirectoryTree\\Authorization\\": "src/"
+    "name": "directorytree/authorization",
+    "description": "Native Laravel Authorization.",
+    "keywords": [
+        "authorization",
+        "laravel",
+        "permissions",
+        "roles",
+        "acl"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": ">=7.0",
+        "illuminate/database": "^5.5|^6.20|^7.0|^8.0|^9.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.7|^4.0|^5.0|^6.0|^7.0",
+        "phpunit/phpunit": "^7.0|^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DirectoryTree\\Authorization\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DirectoryTree\\Authorization\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DirectoryTree\\Authorization\\AuthorizationServiceProvider"
+            ]
+        }
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "DirectoryTree\\Authorization\\Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "DirectoryTree\\Authorization\\AuthorizationServiceProvider"
-      ]
-    }
-  }
 }
