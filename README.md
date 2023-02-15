@@ -6,7 +6,7 @@
 
 <p align="center">
 <a href="https://github.com/DirectoryTree/Authorization/actions">
-<img src="https://img.shields.io/github/workflow/status/directorytree/Authorization/run-tests.svg?style=flat-square">
+<img src="https://img.shields.io/github/actions/workflow/status/directorytree/authorization/run-tests.yml?branch=master&style=flat-square">
 </a>
 <a href="https://scrutinizer-ci.com/g/DirectoryTree/Authorization/?branch=master">
 <img src="https://img.shields.io/scrutinizer/g/DirectoryTree/Authorization/master.svg?style=flat-square"/>
