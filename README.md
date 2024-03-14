@@ -29,8 +29,6 @@ An easy, native role / permission management system for Laravel.
 
 ## Installation
 
-> **Note**: Laravel 5.5 or greater is required.
-
 To get started, install Authorization via the Composer package manager:
 
     composer require directorytree/authorization
