@@ -92,9 +92,6 @@ You're free to extend the models used internally by Authorization, or create you
 Instruct Authorization to use your own models via the `Authorization` class in your `AuthServiceProvider`:
 
 ```php
-use App\Models\User;
-use App\Models\Role;
-use App\Models\Permission;
 use DirectoryTree\Authorization\Authorization;
 
 /**
@@ -106,9 +103,9 @@ public function boot()
 {
     $this->registerPolicies();
 
-    Authorization::useUserModel(User::class);
-    Authorization::useRoleModel(Role::class);
-    Authorization::usePermissionModel(Permission::class);
+    Authorization::useUserModel(\App\Models\User::class);
+    Authorization::useRoleModel(\App\Models\Role::class);
+    Authorization::usePermissionModel(\App\Models\Permission::class);
 }
 ```
 
@@ -155,6 +152,8 @@ Authorization uses native Laravel relationships, so there's no need to learn a n
 Create a permission:
 
 ```php
+use DirectoryTree\Authorization\Permission;
+
 $createUsers = Permission::create([
     'name' => 'users.create',
     'label' => 'Create Users',
@@ -164,6 +163,8 @@ $createUsers = Permission::create([
 Create a role:
 
 ```php
+use DirectoryTree\Authorization\Role;
+
 $admin = Role::create([
     'name' => 'administrator',
     'label' => 'Admin',
