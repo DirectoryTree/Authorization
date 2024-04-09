@@ -5,6 +5,7 @@ namespace DirectoryTree\Authorization\Traits;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use DirectoryTree\Authorization\Authorization;
+use Cache;
 
 trait Authorizable
 {
@@ -105,11 +106,13 @@ trait Authorizable
      */
     public function hasPermission($permission)
     {
+        $permissions = $this->getPermissions();
+
         if (is_string($permission)) {
             // If we've been given a string, then we can
             // assume its the permissions name. We will
             // attempt to fetch it from the database.
-            $permission = Authorization::permission()->whereName($permission)->first();
+            $permission = $permissions->where('name', $permission)->first();
         }
 
         if (! $permission instanceof Model) {
@@ -119,7 +122,7 @@ trait Authorizable
         // Here we will check if the user has been granted
         // explicit this permission explicitly. If so, we
         // can return here. No further check is needed.
-        if ($this->permissions()->find($permission->getKey())) {
+        if ($permissions->find($permission->getKey())) {
             return true;
         }
 
@@ -203,5 +206,15 @@ trait Authorizable
     public function doesNotHaveAnyPermissions($permissions)
     {
         return ! $this->hasAnyPermissions($permissions);
+    }
+
+    public function getPermissions()
+    {
+        if (! Authorization::$cachesPermissions) {
+            return $this->permissions()->get();
+        }
+        return Cache::remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
+            return $this->permissions()->get();
+        });
     }
 }
