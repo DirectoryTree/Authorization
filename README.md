@@ -345,7 +345,7 @@ Checking for multiple permissions:
 if ($user->hasPermissions(['users.create', 'users.edit'])) {
     // This user has both creation and edit rights.
 } else {
-    // It looks like the user doesn't have one of the specified permissions.
+    // The user doesn't have one of the specified permissions.
 }
 ```
 
@@ -355,7 +355,7 @@ Checking if the user has any permissions:
 if ($user->hasAnyPermissions(['users.create', 'users.edit', 'users.destroy'])) {
     // This user either has create, edit or destroy permissions.
 } else {
-    // It looks like the user doesn't have any of the specified permissions.
+    // The user doesn't have any of the specified permissions.
 }
 ```
 
@@ -365,7 +365,7 @@ Checking if the user has a role:
 if ($user->hasRole('administrator')) {
     // This user is an administrator.
 } else {
-    // It looks like the user isn't an administrator.
+    // The user isn't an administrator.
 }
 ```
 
@@ -375,7 +375,7 @@ Checking if the user has specified roles:
 if ($user->hasRoles(['administrator', 'member'])) {
     // This user is an administrator and a member.
 } else {
-    // It looks like the user isn't an administrator or member.
+    // The user isn't an administrator or member.
 }
 ```
 
@@ -385,7 +385,7 @@ Checking if the user has any specified roles:
 if ($user->hasAnyRoles(['administrator', 'member', 'guest'])) {
     // This user is either an administrator, member or guest.
 } else {
-    // It looks like the user doesn't have any of these roles.
+    // The user doesn't have any of these roles.
 }
 ```
 
