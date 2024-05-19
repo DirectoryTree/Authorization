@@ -14,28 +14,14 @@ class AuthorizationServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->registerMigrations();
-
             $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
+                __DIR__.'/../database/migrations/create_authorization_tables.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_authorization_tables.php'),
             ], 'authorization-migrations');
         }
 
         // Register the permissions.
         if (Authorization::$registersInGate) {
             app(PermissionRegistrar::class)->register();
-        }
-    }
-
-    /**
-     * Register Authorization migration files.
-     *
-     * @return void
-     */
-    protected function registerMigrations()
-    {
-        if (Authorization::$runsMigrations) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
     }
 }

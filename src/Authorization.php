@@ -7,13 +7,6 @@ use DateTimeInterface;
 class Authorization
 {
     /**
-     * Indicates if Authorization migrations will be run.
-     *
-     * @var bool
-     */
-    public static $runsMigrations = true;
-
-    /**
      * Indicates if Authorization will register permissions into the gate.
      *
      * @var bool
@@ -208,18 +201,6 @@ class Authorization
     public static function disablePermissionCache()
     {
         static::$cachesPermissions = false;
-
-        return new static;
-    }
-
-    /**
-     * Configure Authorization to not register its migrations.
-     *
-     * @return static
-     */
-    public static function ignoreMigrations()
-    {
-        static::$runsMigrations = false;
 
         return new static;
     }
