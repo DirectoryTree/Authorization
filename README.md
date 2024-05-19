@@ -31,14 +31,21 @@ An easy, native role / permission management system for Laravel.
 
 To get started, install Authorization via the Composer package manager:
 
-    composer require directorytree/authorization
+```bash
+composer require directorytree/authorization
+```
 
-The Authorization service provider registers its own database migration directory
-with the framework, so you should migrate your database after installing the
-package. The Authorization migrations will create the tables your
-application needs to store roles and permissions:
+You should publish the migration file as the package needs to store roles and permissions:
 
-    php artisan migrate
+```bash
+php artisan vendor:publish --tag=authorization-migrations"
+```
+
+Run migrations
+
+```bash
+php artisan migrate
+```
 
 Now insert the `DirectoryTree\Authorization\Traits\Authorizable` onto your `App\Models\User` model:
 
@@ -59,27 +66,6 @@ class User extends Authenticatable
 ```
 
 You can now perform user authorization.
-
-### Migration Customization
-
-If you would not like to use Authorization's default migrations, you should call the
-`Authorization::ignoreMigrations` method in the `register` method of your
-`AppServiceProvider`. You may export the default migrations using
-`php artisan vendor:publish --tag=authorization-migrations`.
-
-```php
-use DirectoryTree\Authorization\Authorization;
-
-/**
- * Register any application services.
- *
- * @return void
- */
-public function register()
-{
-    Authorization::ignoreMigrations();
-}
-```
 
 ### Model Customization
 

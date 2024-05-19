@@ -4,14 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuthorizationTables extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
@@ -51,10 +49,8 @@ class CreateAuthorizationTables extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('role_user');
         Schema::dropIfExists('permission_role');
@@ -62,4 +58,4 @@ class CreateAuthorizationTables extends Migration
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('roles');
     }
-}
+};

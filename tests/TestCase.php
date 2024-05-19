@@ -2,27 +2,33 @@
 
 namespace DirectoryTree\Authorization\Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Foundation\Testing\WithFaker;
 use DirectoryTree\Authorization\Authorization;
-use DirectoryTree\Authorization\AuthorizationServiceProvider;
 use DirectoryTree\Authorization\Tests\Stubs\User;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use DirectoryTree\Authorization\AuthorizationServiceProvider;
 
-class TestCase extends BaseTestCase
+abstract class TestCase extends BaseTestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
         parent::setUp();
+    }
 
-        // Create the users table for testing.
-        Schema::create('users', function ($table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->timestamps();
-        });
+    /**
+     * {@inheritdoc}
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(base_path('migrations'));
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     /**
@@ -44,6 +50,8 @@ class TestCase extends BaseTestCase
      */
     protected function createUser($attributes = [])
     {
+        $attributes['email'] = $this->faker->unique()->safeEmail;
+        $attributes['password'] = Hash::make(Str::random(10));
         return User::create($attributes);
     }
 

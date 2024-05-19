@@ -9,5 +9,7 @@ class User extends BaseUser
 {
     use Authorizable;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
 }
