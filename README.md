@@ -18,7 +18,6 @@ An easy, native role / permission management system for Laravel.
 ## Index
 
 -   [Installation](#installation)
-    -   [Migration Customization](#migration-customization)
     -   [Model Customization](#model-customization)
 -   [Usage](#usage)
 -   [Checking Permissions & Roles](#checking-permissions--roles)
@@ -38,7 +37,7 @@ composer require directorytree/authorization
 You should publish the migration file as the package needs to store roles and permissions:
 
 ```bash
-php artisan vendor:publish --tag=authorization-migrations"
+php artisan vendor:publish --tag="authorization-migrations"
 ```
 
 Run migrations
