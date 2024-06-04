@@ -57,7 +57,7 @@ class PermissionRegistrar
     public function getPermissions()
     {
         try {
-            if (Authorization::$cachesPermissions) {
+            if (Authorization::$cachesPermissions && !app()->runningInConsole()) {
                 return $this->cache->remember(Authorization::cacheKey(), Authorization::cacheExpiresIn(), function () {
                     return Authorization::permission()->get();
                 });
