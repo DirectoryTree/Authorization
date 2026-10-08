@@ -1,21 +1,29 @@
-<!-- readme.md -->
+<p align="center">
+    <img src="https://github.com/DirectoryTree/Authorization/blob/master/art/logo.svg" width="300" alt="Authorization">
+</p>
+
+<p align="center">An easy, native role / permission management system for Laravel.</p>
 
 <p align="center">
-<img src="https://github.com/DirectoryTree/Authorization/blob/master/art/logo.svg" width="400">
+    <a href="https://github.com/DirectoryTree/Authorization/actions/workflows/run-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/DirectoryTree/Authorization/run-tests.yml?branch=master&amp;style=flat-square" alt="Tests"></a>
+    <a href="https://packagist.org/packages/directorytree/authorization"><img src="https://img.shields.io/packagist/dt/directorytree/authorization.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/directorytree/authorization"><img src="https://img.shields.io/packagist/v/directorytree/authorization.svg?style=flat-square" alt="Latest Version"></a>
+    <a href="https://github.com/DirectoryTree/Authorization/blob/master/license.md"><img src="https://img.shields.io/github/license/DirectoryTree/Authorization?style=flat-square" alt="License"></a>
 </p>
 
 <p align="center">
-<a href="https://github.com/DirectoryTree/Authorization/actions"><img src="https://img.shields.io/github/actions/workflow/status/directorytree/authorization/run-tests.yml?branch=master&style=flat-square"></a>
-<a href="https://packagist.org/packages/DirectoryTree/Authorization"><img src="https://img.shields.io/packagist/dt/DirectoryTree/Authorization.svg?style=flat-square"/></a>
-<a href="https://packagist.org/packages/DirectoryTree/Authorization"><img src="https://img.shields.io/packagist/v/DirectoryTree/Authorization.svg?style=flat-square"/></a>
-<a href="https://packagist.org/packages/DirectoryTree/Authorization"><img src="https://img.shields.io/github/license/DirectoryTree/Authorization.svg?style=flat-square"/></a>
+    <a href="#contents">Contents</a>
+    <span> · </span>
+    <a href="#installation">Installation</a>
+    <span> · </span>
+    <a href="#usage">Usage</a>
+    <span> · </span>
+    <a href="#running-tests">Testing</a>
 </p>
 
-<p align="center">
-An easy, native role / permission management system for Laravel.
-</p>
+---
 
-## Index
+## Contents
 
 -   [Installation](#installation)
     -   [Migration Customization](#migration-customization)
@@ -31,14 +39,18 @@ An easy, native role / permission management system for Laravel.
 
 To get started, install Authorization via the Composer package manager:
 
-    composer require directorytree/authorization
+```bash
+composer require directorytree/authorization
+```
 
 The Authorization service provider registers its own database migration directory
 with the framework, so you should migrate your database after installing the
 package. The Authorization migrations will create the tables your
 application needs to store roles and permissions:
 
-    php artisan migrate
+```bash
+php artisan migrate
+```
 
 Now insert the `DirectoryTree\Authorization\Traits\Authorizable` onto your `App\Models\User` model:
 
